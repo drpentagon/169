@@ -1,9 +1,24 @@
 import Timer from './timer.js';
 import Graphics from './graphics-handler.js';
 
+
+let instance = null;
+let key = {};
+
 class SceneBackground {
-    constructor(ctx) {
-        this.g = new Graphics(ctx);
+    constructor(key_) {
+        if(key !== key_) throw 'Illegal call to singleton';
+    }
+
+    static get instance() {
+        if(instance)
+            return instance;
+
+        return (instance = new SceneBackground(key));
+    }
+
+    setContext(ctx_) {
+        this.g = new Graphics(ctx_);
     }
 
     update() {

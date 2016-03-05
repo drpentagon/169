@@ -6,9 +6,6 @@ let key = {};
 class GameStats {
     constructor(key_) {
         if(key !== key_) throw 'Illegal call to singleton';
-        this.lives = 3;
-        this.score = 0;
-        this.level = 1;
     }
 
     static get instance() {
@@ -20,6 +17,12 @@ class GameStats {
 
     setContext(ctx_) {
         this.g = new Graphics(ctx_);
+    }
+
+    reset() {
+        this.lives = 3;
+        this.score = 0;
+        this.level = 1;
     }
 
     render() {

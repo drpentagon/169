@@ -6,7 +6,6 @@ let key = {};
 class SceneStatic {
     constructor(key_) {
         if(key !== key_) throw 'Illegal call to singleton';
-        this.objects = new Array();
     }
 
     static get instance() {
@@ -18,6 +17,10 @@ class SceneStatic {
 
     setContext(ctx_) {
         this.g = new Graphics(ctx_);
+    }
+
+    reset() {
+        this.objects = new Array();
     }
 
     addObject(object_) {

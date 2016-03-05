@@ -6,8 +6,6 @@ let key = {};
 class SceneAnimation {
     constructor(key_) {
         if(key !== key_) throw 'Illegal call to singleton';
-        this.balls = new Array();
-        this.objects = new Array();
     }
 
     static get instance() {
@@ -19,6 +17,11 @@ class SceneAnimation {
 
     setContext(ctx_) {
         this.g = new Graphics(ctx_);
+    }
+
+    reset() {
+        this.balls = new Array();
+        this.objects = new Array();
     }
 
     addBall(ball_) {

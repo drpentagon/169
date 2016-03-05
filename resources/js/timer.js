@@ -19,10 +19,13 @@ class Timer {
         this.g = new Graphics(ctx_);
     }
 
-    setGameLength(length_) {
-        this.length = length_;
+    reset() {
         this.elapsedTime = 0;
         this.dotsLeft = 91;
+    }
+
+    setGameLength(length_) {
+        this.length = length_;
     }    
 
     start() {
