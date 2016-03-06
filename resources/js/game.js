@@ -135,38 +135,6 @@ class Game {
 			}
 		});
 
-/*
-		for(let x = 0; x < 13; x++) {
-			let wall = new Wall(x, 0);
-			LevelGrapics.instance.addObject(wall);
-			LevelData.instance.addObject(wall);
-
-			let wall2 = new Wall(x, 12);
-			LevelGrapics.instance.addObject(wall2);
-			LevelData.instance.addObject(wall2);	
-		}
-
-		for(let y = 1; y < 6; y++) {
-			let wall = new Wall(0, y);
-			LevelGrapics.instance.addObject(wall);
-			LevelData.instance.addObject(wall);
-
-			let wall2 = new Wall(12, y);
-			LevelGrapics.instance.addObject(wall2);
-			LevelData.instance.addObject(wall2);	
-		}
-
-		for(let y = 7; y < 12; y++) {
-			let wall = new Wall(0, y);
-			LevelGrapics.instance.addObject(wall);
-			LevelData.instance.addObject(wall);
-
-			let wall2 = new Wall(12, y);
-			LevelGrapics.instance.addObject(wall2);
-			LevelData.instance.addObject(wall2);	
-		}*/
-
-
 		LevelGrapics.instance.render();
     }
 
@@ -175,65 +143,6 @@ class Game {
     		should have time limit, name, goal, and at least one ball
     	*/
     }
-
-/*
-    initLevel() {
-		for(let x = 0; x < 13; x++) {
-			let wall = new Wall(x, 0);
-			LevelGrapics.instance.addObject(wall);
-			LevelData.instance.addObject(wall);
-
-			let wall2 = new Wall(x, 12);
-			LevelGrapics.instance.addObject(wall2);
-			LevelData.instance.addObject(wall2);	
-		}
-
-		for(let y = 1; y < 6; y++) {
-			let wall = new Wall(0, y);
-			LevelGrapics.instance.addObject(wall);
-			LevelData.instance.addObject(wall);
-
-			let wall2 = new Wall(12, y);
-			LevelGrapics.instance.addObject(wall2);
-			LevelData.instance.addObject(wall2);	
-		}
-
-		for(let y = 7; y < 12; y++) {
-			let wall = new Wall(0, y);
-			LevelGrapics.instance.addObject(wall);
-			LevelData.instance.addObject(wall);
-
-			let wall2 = new Wall(12, y);
-			LevelGrapics.instance.addObject(wall2);
-			LevelData.instance.addObject(wall2);	
-		}
-
-		var tiles = [[1,4], [3,4], [5,4], [7,4], [9,4], [11,4],
-					[5,5], [7,5], [5, 7], [7,7],
-					[4,1], [4,3], [4,4], [4,5], [4,7], [4,8], [4,9], [4,11],
-					[8,1], [8,3], [8,4], [8,5], [8,7], [8,8], [8,9], [8,11],
-					[1,8], [3,8], [5,8], [7,8], [9,8], [11,8]];
-
-		for(let i = 0; i < tiles.length; i++) {
-			let wall = new Wall(tiles[i][0], tiles[i][1]);
-			LevelGrapics.instance.addObject(wall);
-			LevelData.instance.addObject(wall);	
-		}
-
-		Animation.instance.addBall(new Ball(3, 3, 3, 0));
-		Animation.instance.addBall(new Ball(11, 11, 0, 3));
-		Animation.instance.addBall(new Ball(2, 11, 5, 0));
-		Animation.instance.addBall(new Ball(2, 2, 0, 4));
-		Animation.instance.addBall(new Ball(8, 6, -3, 0));
-		let goal = new Goal(6, 6)
-		Animation.instance.addObject(goal);
-		LevelData.instance.addObject(goal);	
-
-		Timer.instance.setGameLength(10);		
-
-		LevelGrapics.instance.render();
-    }
-    */
 
     startGameLoop() {
     	Timer.instance.start();
