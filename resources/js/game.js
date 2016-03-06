@@ -71,7 +71,112 @@ class Game {
     	lib.BOUNCES = 0;
     }
 
+    initLevel() {
+    	const level = {
+    		"name":"Demo",
+    		background:"rgb(0,0,0)",
+    		"length":45,
+    		"bounce-limit":100,
+    		"goal": {
+    			"rotates":true,
+    			"x":6,
+    			"y":6,
+    		},
+    		"walls": [
+    			{"line":[[0,0],[12,0]]},
+				{"line":[[0,12],[12,12]]},
+				{"line":[[0,1],[0,5]]},
+				{"line":[[12,1],[12,5]]},
+				{"line":[[0,7],[0,11]]},
+				{"line":[[12,7],[12,11]]},
+				{"points":[[1,4], [3,4], [5,4], [7,4], [9,4], [11,4],
+					[5,5], [7,5], [5, 7], [7,7],
+					[4,1], [4,3], [4,4], [4,5], [4,7], [4,8], [4,9], [4,11],
+					[8,1], [8,3], [8,4], [8,5], [8,7], [8,8], [8,9], [8,11],
+					[1,8], [3,8], [5,8], [7,8], [9,8], [11,8]]},
+    		],
+    		"balls": [
+    			{"x":3, "y":3, "dx":3, "dy":0},
+    			{"x":11, "y":11, "dx":0, "dy":3},
+    			{"x":1, "y":11, "dx":10, "dy":0},
+    			{"x":2, "y":2, "dx":0, "dy":4},
+    			{"x":8, "y":6, "dx":-3, "dy":0},
+    			],
+    	};  	
 
+    	this.validateLevel(level);
+
+		Timer.instance.setGameLength(level.length);
+
+		let goal = new Goal(level.goal.x, level.goal.y);
+		Animation.instance.addObject(goal);
+		LevelData.instance.addObject(goal);	
+
+		level.balls.forEach(b => Animation.instance.addBall(new Ball(b.x, b.y, b.dx, b.dy)));
+
+		level.walls.forEach((t) => {
+			switch(Object.keys(t)[0]) {
+			    case "line":
+			    	for(let x = t.line[0][0]; x <= t.line[1][0]; x++) {
+			    		for(let y = t.line[0][1]; y <= t.line[1][1]; y++) {
+							let wall = new Wall(x, y);
+							LevelGrapics.instance.addObject(wall);
+							LevelData.instance.addObject(wall);				    		
+			    		}
+			    	}
+			        break;
+			    case "points":
+			    	t.points.map(w => {
+						let wall = new Wall(w[0], w[1]);
+						LevelGrapics.instance.addObject(wall);
+						LevelData.instance.addObject(wall);				    		
+			    	});
+			        break;
+			}
+		});
+
+/*
+		for(let x = 0; x < 13; x++) {
+			let wall = new Wall(x, 0);
+			LevelGrapics.instance.addObject(wall);
+			LevelData.instance.addObject(wall);
+
+			let wall2 = new Wall(x, 12);
+			LevelGrapics.instance.addObject(wall2);
+			LevelData.instance.addObject(wall2);	
+		}
+
+		for(let y = 1; y < 6; y++) {
+			let wall = new Wall(0, y);
+			LevelGrapics.instance.addObject(wall);
+			LevelData.instance.addObject(wall);
+
+			let wall2 = new Wall(12, y);
+			LevelGrapics.instance.addObject(wall2);
+			LevelData.instance.addObject(wall2);	
+		}
+
+		for(let y = 7; y < 12; y++) {
+			let wall = new Wall(0, y);
+			LevelGrapics.instance.addObject(wall);
+			LevelData.instance.addObject(wall);
+
+			let wall2 = new Wall(12, y);
+			LevelGrapics.instance.addObject(wall2);
+			LevelData.instance.addObject(wall2);	
+		}*/
+
+
+		LevelGrapics.instance.render();
+    }
+
+    validateLevel(level_) {
+    	/*	
+    		should have time limit, name, goal, and at least one ball
+    	*/
+    }
+
+/*
     initLevel() {
 		for(let x = 0; x < 13; x++) {
 			let wall = new Wall(x, 0);
@@ -128,6 +233,7 @@ class Game {
 
 		LevelGrapics.instance.render();
     }
+    */
 
     startGameLoop() {
     	Timer.instance.start();
@@ -179,11 +285,20 @@ class Game {
 
 	handleLostLife() {
 		Stats.instance.lives--;
-		Stats.instance.render();		
-		alert("Time out!\nBalls left: " + Animation.instance.balls.length);			
-		this.resetLevel();
-		this.initLevel();
-		this.startGameLoop();		
+		Stats.instance.render();
+		
+		if(Stats.instance.lives >= 0) {
+			alert("Time out!\nBalls left: " + Animation.instance.balls.length);			
+			this.resetLevel();
+			this.initLevel();
+			this.startGameLoop();		
+		} else {
+			alert("Game over!");			
+			this.reset();
+			this.initLevel();
+			this.startGameLoop();					
+		}	
+
 	}
 
 	handleLevelClear() {
