@@ -4,7 +4,7 @@ let key = {};
 class LevelData {
     constructor(key_) {
         if(key !== key_) throw 'Illegal call to singleton';
-        this.setupMatrix();
+        this.setupLevels();
     }
 
     static get instance() {
@@ -14,29 +14,45 @@ class LevelData {
         return (instance = new LevelData(key));
     }
 
-    setupMatrix() {
-        this.matrix = []
+    setupLevels() {
+        this.levels = [];
 
-        for(let x = 0; x < 13; x++) {
-            this.matrix[x] = [];
-            for(let y = 0; y < 13; y++) {
-                this.matrix[x][y] = null;
-            }
-        }
+        this.levels.push({
+            "name":"Demo",
+            background:"rgb(0,0,0)",
+            "length":45,
+            "bounce-limit":100,
+            "goal": {
+                "rotates":true,
+                "x":6,
+                "y":6,
+            },
+            "walls": [
+                {"line":[[0,0],[12,0]]},
+                {"line":[[0,12],[12,12]]},
+                {"line":[[0,1],[0,5]]},
+                {"line":[[12,1],[12,5]]},
+                {"line":[[0,7],[0,11]]},
+                {"line":[[12,7],[12,11]]},
+                {"points":[[1,4], [3,4], [5,4], [7,4], [9,4], [11,4],
+                    [5,5], [7,5], [5, 7], [7,7],
+                    [4,1], [4,3], [4,4], [4,5], [4,7], [4,8], [4,9], [4,11],
+                    [8,1], [8,3], [8,4], [8,5], [8,7], [8,8], [8,9], [8,11],
+                    [1,8], [3,8], [5,8], [7,8], [9,8], [11,8]]},
+            ],
+            "balls": [
+                {"x":3, "y":3, "dx":3, "dy":0},
+                {"x":11, "y":11, "dx":0, "dy":3},
+                {"x":1, "y":11, "dx":10, "dy":0},
+                {"x":2, "y":2, "dx":0, "dy":4},
+                {"x":8, "y":6, "dx":-3, "dy":0},
+                ],
+        });
     }
 
-    addObject(object_) {
-        this.matrix[object_.xPos][object_.yPos] = object_;
+    getLevel(id_) {
+        return this.levels[id_];
     }
-
-    removeObject(object_) {
-        this.matrix[object_.xPos][object_.yPos] = null;
-    }
-
-    getObject(xPos_, yPos_) {
-        return this.matrix[xPos_][yPos_];
-    }
-
 }
 
 export default LevelData;

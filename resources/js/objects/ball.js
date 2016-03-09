@@ -1,4 +1,4 @@
-import Level from '../level-data.js';
+import Data from '../scene-data.js';
 import Animation from '../scene-animation.js';
 import {getGridPosition, TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
@@ -52,11 +52,11 @@ class Ball extends GameObject {
             yNext = (this.yPos + parseInt(Math.abs(this.dy) / this.dy) + 13) % 13;
         } 
         
-        this.nextTile = Level.instance.getObject(xNext, yNext);
+        this.nextTile = Data.instance.getObject(xNext, yNext);
     }
 
     setCurrentTile() {
-        this.currentTile = Level.instance.getObject(this.xPos, this.yPos);
+        this.currentTile = Data.instance.getObject(this.xPos, this.yPos);
     }
 
     render() {

@@ -56,6 +56,10 @@ class SceneAnimation {
         this.objects.map(o => o.render());
         this.balls.map(b => b.render());
     }
+
+    clear() {
+        this.g.clear();
+    }
 }
 
 export default SceneAnimation;

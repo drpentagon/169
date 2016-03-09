@@ -20,7 +20,7 @@ class GameStats {
     }
 
     reset() {
-        this.lives = 3;
+        this.lives = 1;
         this.score = 0;
         this.level = 1;
     }

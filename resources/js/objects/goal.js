@@ -1,4 +1,4 @@
-import Level from '../level-data.js';
+import Data from '../scene-data.js';
 import {TILE_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
 import {ballBoxCollision} from '../game-helper.js';
@@ -22,7 +22,7 @@ class Goal extends GameObject {
     }
 
     remove() {
-        Level.instance.removeObject(this);
+        Data.instance.removeObject(this);
     }    
 
     interact(ball_) {

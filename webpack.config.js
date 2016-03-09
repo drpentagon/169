@@ -9,7 +9,7 @@ module.exports = {
     entry: [
       	"babel-polyfill",
     	"./less/main.less",
-    	"./resources/main.js"
+    	"./resources/js/game.js"
    	],
     output: {
         path: __dirname + "/build/",

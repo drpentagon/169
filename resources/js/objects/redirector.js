@@ -1,4 +1,4 @@
-import Level from '../level-data.js';
+import Data from '../scene-data.js';
 import Animation from '../scene-animation.js';
 import {TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
@@ -40,7 +40,7 @@ class Redirector extends GameObject {
 
     remove() {
         Animation.instance.removeObject(this);
-        Level.instance.removeObject(this);
+        Data.instance.removeObject(this);
         this.state = 'removed';
     }    
 
