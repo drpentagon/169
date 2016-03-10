@@ -1,8 +1,7 @@
 import Data from '../scene-data.js';
 import Animation from '../scene-animation.js';
-import {TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
+import {ballBoxCollision, getGridPosition, TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
-import {ballBoxCollision, getGridPosition} from '../game-helper.js';
 
 const polygon = [];
 polygon[0] = [{x:8, y:24}, {x:20, y:24}, {x:20, y:40}, {x:36, y:40}, {x:36, y:52}, {x:8, y:52}];

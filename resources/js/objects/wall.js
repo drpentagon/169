@@ -1,7 +1,6 @@
 import Data from '../scene-data.js';
-import {TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
+import {ballBoxCollision, TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
-import {ballBoxCollision} from '../game-helper.js';
 
 class Wall extends GameObject {
     constructor(xPos_, yPos_) {

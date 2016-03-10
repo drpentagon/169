@@ -23,6 +23,10 @@ class SceneStatic {
         this.objects = new Array();
     }
 
+    clear() {
+        this.g.clear();
+    }
+
     addObject(object_) {
         object_.setGraphicsHandler(this.g);
         this.objects.push(object_);

@@ -69,7 +69,6 @@ class TextHandler {
     	let multiplicator = (pixelSize + spacing) * 3 + 8;
     	let i = 0;
 
-    	this.g.clear();
     	this.g.setFillStyle('rgba(255, 255, 255, 0.8)');
     	text_.toUpperCase().split('').forEach(ch => {
     		if(this.writeLetter(ch, x_ + i * multiplicator, y_, pixelSize, spacing)) {
@@ -78,8 +77,10 @@ class TextHandler {
     	});
 
     	this.element.classList.add('show');
+    }
+
+    setCallback(callback_) {
     	this.callback = callback_;
-    	
     }
 
     callbackHandler() {

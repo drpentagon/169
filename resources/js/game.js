@@ -52,6 +52,10 @@ class Game {
 		const text_el = document.querySelector(".canvas--text");
 		Text.instance.setContext(text_el.getContext("2d"));
 		Text.instance.setCanvasElement(text_el);
+
+		Text.instance.setCallback(() => {
+			this.startGameLoop();		
+		});		
     }
 
     setupInteraction() {
@@ -88,8 +92,14 @@ class Game {
 		Data.instance.addObject(goal);	
 
 		level.balls.forEach(b => Animation.instance.addBall(new Ball(b.x, b.y, b.dx, b.dy)));
+		this.renderWalls(level.walls);
 
-		level.walls.forEach((t) => {
+		LevelGrapics.instance.render();
+    }
+
+    renderWalls(walls_) {
+    	console.log(walls_.length);
+		walls_.forEach((t) => {
 			switch(Object.keys(t)[0]) {
 			    case "line":
 			    	for(let x = t.line[0][0]; x <= t.line[1][0]; x++) {
@@ -109,8 +119,6 @@ class Game {
 			        break;
 			}
 		});
-
-		LevelGrapics.instance.render();
     }
 
     validateLevel(level_) {
@@ -175,18 +183,15 @@ class Game {
 			this.resetLevel();
 			this.initLevel();
 			Animation.instance.clear();
-			Text.instance.writeHeadline("Time out.", 15, 15, () => {
-				this.startGameLoop();		
-			});
+			Text.instance.clear();
+			Text.instance.writeHeadline("Time out.", 15, 15);
 		} else {
 			this.reset();
 			this.initLevel();
 			Animation.instance.clear();
-			Text.instance.writeHeadline("Game over", 15, 15, () => {
-				this.startGameLoop();
-			});			
-		}	
-
+			Text.instance.clear();
+			Text.instance.writeHeadline("Game over", 15, 15);
+		}
 	}
 
 	handleLevelClear() {
@@ -196,9 +201,24 @@ class Game {
 		Stats.instance.score += score + bonus;
 		Stats.instance.level++;
 		Stats.instance.render();
-		Text.instance.writeHeadline("Course clear", 1, 15, () => {
-			this.startGameLoop();
-		});					
+		Animation.instance.clear();
+
+		LevelGrapics.instance.reset();
+
+		this.renderWalls(LevelData.instance.getLevel("frame").walls);
+
+		LevelGrapics.instance.clear();
+		LevelGrapics.instance.render();
+
+		Text.instance.clear();
+		Text.instance.writeHeadline("Course", 15, 15);		
+		Text.instance.writeHeadline("Clear", 15, 22);		
+		Text.instance.write("score", 15, 36);		
+		Text.instance.write("" + score, 43, 36);
+		Text.instance.write("Bonus", 15, 43);
+		Text.instance.write("" + bonus, 43, 43);
+		Text.instance.write("total", 15, 50);
+		Text.instance.write("" + (score + bonus), 43, 50);
 	}
 }
 

@@ -15,9 +15,19 @@ class LevelData {
     }
 
     setupLevels() {
-        this.levels = [];
+        this.levels = {};
 
-        this.levels.push({
+        this.levels["frame"] = {
+            "name":"text frame",
+            "walls": [
+                {"line":[[0,0],[12,0]]},
+                {"line":[[0,12],[12,12]]},
+                {"line":[[0,1],[0,11]]},
+                {"line":[[12,1],[12,11]]},
+            ],
+        };        
+
+        this.levels["0"] = {
             "name":"Demo",
             background:"rgb(0,0,0)",
             "length":45,
@@ -47,7 +57,7 @@ class LevelData {
                 {"x":2, "y":2, "dx":0, "dy":4},
                 {"x":8, "y":6, "dx":-3, "dy":0},
                 ],
-        });
+        };
     }
 
     getLevel(id_) {
