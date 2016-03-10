@@ -1,20 +1,5 @@
-let instance = null;
-let key = {};
-
 class LevelData {
-    constructor(key_) {
-        if(key !== key_) throw 'Illegal call to singleton';
-        this.setupLevels();
-    }
-
-    static get instance() {
-        if(instance)
-            return instance;
-              
-        return (instance = new LevelData(key));
-    }
-
-    setupLevels() {
+    constructor() {
         this.levels = {};
 
         this.levels["frame"] = {

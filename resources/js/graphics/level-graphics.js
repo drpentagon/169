@@ -1,21 +1,7 @@
 import Graphics from './graphics-handler.js';
 
-let instance = null;
-let key = {};
-
-class SceneStatic {
-    constructor(key_) {
-        if(key !== key_) throw 'Illegal call to singleton';
-    }
-
-    static get instance() {
-        if(instance)
-            return instance;
-              
-        return (instance = new SceneStatic(key));
-    }
-
-    setContext(ctx_) {
+class LevelGraphics {
+    constructor(ctx_) {
         this.g = new Graphics(ctx_);
     }
 
@@ -92,4 +78,4 @@ class SceneStatic {
     }    
 }
 
-export default SceneStatic;
+export default LevelGraphics;

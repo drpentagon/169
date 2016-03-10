@@ -1,21 +1,7 @@
 import Graphics from './graphics-handler.js';
 
-let instance = null;
-let key = {};
-
-class GameStats {
-    constructor(key_) {
-        if(key !== key_) throw 'Illegal call to singleton';
-    }
-
-    static get instance() {
-        if(instance)
-            return instance;
-
-        return (instance = new GameStats(key));
-    }
-
-    setContext(ctx_) {
+class StatusGraphics {
+    constructor(ctx_) {
         this.g = new Graphics(ctx_);
     }
 
@@ -73,4 +59,4 @@ class GameStats {
     }
 }
 
-export default GameStats;
+export default StatusGraphics;

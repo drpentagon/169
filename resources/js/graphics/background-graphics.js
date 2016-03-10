@@ -2,22 +2,8 @@ import TimerGraphics from './timer-graphics.js';
 import Graphics from './graphics-handler.js';
 
 
-let instance = null;
-let key = {};
-
-class SceneBackground {
-    constructor(key_) {
-        if(key !== key_) throw 'Illegal call to singleton';
-    }
-
-    static get instance() {
-        if(instance)
-            return instance;
-
-        return (instance = new SceneBackground(key));
-    }
-
-    setContext(ctx_) {
+class BackgroundGraphics {
+    constructor(ctx_) {
         this.g = new Graphics(ctx_);
     }
 
@@ -35,4 +21,4 @@ class SceneBackground {
     }
 }
 
-export default SceneBackground;
+export default BackgroundGraphics;
