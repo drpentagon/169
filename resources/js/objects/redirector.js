@@ -1,7 +1,7 @@
 import Data from '../game-data.js';
-import AnimationGraphics from '../graphics/animation-graphics.js';
 import {ballBoxCollision, getGridPosition, TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
+import Graphics from '../graphics/graphics-handler.js';
 
 const polygon = [];
 polygon[0] = [{x:8, y:24}, {x:20, y:24}, {x:20, y:40}, {x:36, y:40}, {x:36, y:52}, {x:8, y:52}];
@@ -38,7 +38,6 @@ class Redirector extends GameObject {
     }
 
     remove() {
-        AnimationGraphics.instance.removeObject(this);
         Data.instance.removeObject(this);
         this.state = 'removed';
     }    
@@ -106,10 +105,10 @@ class Redirector extends GameObject {
         }
     }    
 
-    render() {
-        this.g.setFillStyle('rgba(221, 221, 3, 1.0)');
-        this.g.setStrokeStyle('rgba(248, 252, 174, 1.0)');
-        this.g.polygon(polygon[this.type].map(o => {
+    render(ctx_) {
+        Graphics.instance.setFillStyle('rgba(221, 221, 3, 1.0)');
+        Graphics.instance.setStrokeStyle('rgba(248, 252, 174, 1.0)');
+        Graphics.instance.polygon(ctx_, polygon[this.type].map(o => {
             let p = {};
             p.x = o.x + this.x; 
             p.y = o.y + this.y; 

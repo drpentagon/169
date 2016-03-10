@@ -16,7 +16,7 @@ class Timer {
     }
 
     setContext(ctx_) {
-        this.g = new Graphics(ctx_);
+        this.ctx = ctx_;
     }
 
     reset() {
@@ -44,17 +44,17 @@ class Timer {
     }
 
     render() {
-        this.g.clear();
-        this.g.setFillStyle('rgba(255, 255, 255, 0.0)');
-        this.g.setStrokeStyle('rgba(255, 255, 255, 0.5)');
+        Graphics.instance.clear(this.ctx);
+        Graphics.instance.setFillStyle('rgba(255, 255, 255, 0.0)');
+        Graphics.instance.setStrokeStyle('rgba(255, 255, 255, 0.5)');
 
-        this.g.rectangle(0, 0, 732, 20);
+        Graphics.instance.rectangle(this.ctx, 0, 0, 732, 20);
 
-        this.g.setFillStyle('rgba(255, 255, 255, 0.10)');
-        this.g.fillArea(this.dotsLeft, 1,  91 - this.dotsLeft, 1);  
+        Graphics.instance.setFillStyle('rgba(255, 255, 255, 0.10)');
+        Graphics.instance.fillArea(this.ctx, this.dotsLeft, 1,  91 - this.dotsLeft, 1);  
         for(let x = 1; x < this.dotsLeft; x++) {
-            this.g.setFillStyle('rgba(255, ' + parseInt(255 * x / 91) + ', 0, 1.0)');
-            this.g.backgroundRectangle(x,1);
+            Graphics.instance.setFillStyle('rgba(255, ' + parseInt(255 * x / 91) + ', 0, 1.0)');
+            Graphics.instance.backgroundRectangle(this.ctx, x,1);
         }
     }
 }

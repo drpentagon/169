@@ -1,6 +1,7 @@
 import Data from '../game-data.js';
 import {TILE_SIZE, ballBoxCollision} from '../game-helper.js';
 import GameObject from './game-object.js';
+import Graphics from '../graphics/graphics-handler.js';
 
 const polygon = []
 polygon[0] = [[8, 8], [20, 8], [20, 40], [40, 40], [40, 8], [52, 8], [52, 52], [8, 52], [8, 8]];
@@ -18,11 +19,7 @@ class Goal extends GameObject {
         this.yMax = this.y + TILE_SIZE - 4;        
         this.rotational = rotational;
         this.type = 0;
-    }
-
-    remove() {
-        Data.instance.removeObject(this);
-    }    
+    }  
 
     interact(ball_) {
         if((this.type === 0 && ball_.dy > 0) ||
@@ -37,15 +34,15 @@ class Goal extends GameObject {
 
     checkGoal(ball_) {
         if(ballBoxCollision(ball_, this.x + 28, this.x + 32, this.y + 28, this.y + 32)) {
-            ball_.remove();
+            Data.instance.removeBall(ball_);
             this.type = (this.type + 1) % 4;
         }
     }
 
-    render() {
-        this.g.setFillStyle('rgba(218, 3, 221, 1.0)');
-        this.g.setStrokeStyle('rgba(214, 145, 199, 1.0)');
-        this.g.polygon(polygon[this.type].map(o => {
+    render(ctx_) {
+        Graphics.instance.setFillStyle('rgba(218, 3, 221, 1.0)');
+        Graphics.instance.setStrokeStyle('rgba(214, 145, 199, 1.0)');
+        Graphics.instance.polygon(ctx_, polygon[this.type].map(o => {
             let p = {};
             p.x = o[0] + this.x; 
             p.y = o[1] + this.y; 

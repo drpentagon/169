@@ -1,4 +1,5 @@
 import Graphics from './graphics-handler.js';
+import Data from '../game-data.js';
 
 let instance = null;
 let key = {};
@@ -16,49 +17,17 @@ class SceneAnimation {
     }
 
     setContext(ctx_) {
-        this.g = new Graphics(ctx_);
-    }
-
-    reset() {
-        this.balls = new Array();
-        this.objects = new Array();
-    }
-
-    addBall(ball_) {
-        ball_.setGraphicsHandler(this.g);
-        this.balls.push(ball_);
-    }    
-
-    addObject(object_) {
-        object_.setGraphicsHandler(this.g);
-        this.objects.push(object_);
-
-        this.balls.map(b => b.setCurrentTile());
-    }
-
-    removeObject(object_) {
-        this.objects = this.objects.filter(function(object) {
-            return (object !== object_);
-        });
-
-        this.balls = this.balls.filter(function(object) {
-            return (object !== object_);
-        });
-    }
-
-    update(deltaTime_) {
-        this.objects.map(o => o.update(deltaTime_));
-        this.balls.map(b => b.update(deltaTime_));
+        this.ctx = ctx_;
     }
 
     render() {
-        this.g.clear();
-        this.objects.map(o => o.render());
-        this.balls.map(b => b.render());
+        Graphics.instance.clear(this.ctx);
+        Data.instance.animatedObjects.map(o => o.render(this.ctx));
+        Data.instance.balls.map(b => b.render(this.ctx));
     }
 
     clear() {
-        this.g.clear();
+        Graphics.instance.clear(this.ctx);
     }
 }
 

@@ -34,7 +34,7 @@ class TextHandler {
     }
 
     setContext(ctx_) {
-        this.g = new Graphics(ctx_);
+        this.ctx = ctx_;
     }
 
     setCanvasElement(element_) {
@@ -43,7 +43,7 @@ class TextHandler {
     }
 
     clear() {
-    	this.g.clear();
+        Graphics.instance.clear(this.ctx);
     }
 
     write(text_, xPos_, yPos_) {
@@ -53,7 +53,7 @@ class TextHandler {
     	let multiplicator = pixelSize * 4;
     	let i = 0;
 
-    	this.g.setFillStyle('rgba(255, 255, 255, 0.8)');
+    	Graphics.instance.setFillStyle('rgba(255, 255, 255, 0.8)');
     	text_.toUpperCase().split('').forEach(ch => {
     		if(this.writeLetter(ch, x_ + i * multiplicator, y_, pixelSize)) {
     			i++;
@@ -69,7 +69,7 @@ class TextHandler {
     	let multiplicator = (pixelSize + spacing) * 3 + 8;
     	let i = 0;
 
-    	this.g.setFillStyle('rgba(255, 255, 255, 0.8)');
+    	Graphics.instance.setFillStyle('rgba(255, 255, 255, 0.8)');
     	text_.toUpperCase().split('').forEach(ch => {
     		if(this.writeLetter(ch, x_ + i * multiplicator, y_, pixelSize, spacing)) {
     			i++;
@@ -98,7 +98,7 @@ class TextHandler {
                 let pos = 9 - (str.length - p);
                 let xPos = pos % 3;
                 let yPos = parseInt(pos / 3);
-                this.g.square(x_ + xPos * (pixelSize_ + spacing_), y_ + yPos * (pixelSize_ + spacing_), pixelSize_, false);
+                Graphics.instance.square(this.ctx, x_ + xPos * (pixelSize_ + spacing_), y_ + yPos * (pixelSize_ + spacing_), pixelSize_, false);
             }
         }
 

@@ -1,5 +1,6 @@
 
 import {TILE_SIZE} from '../game-helper.js';
+import Graphics from '../graphics/graphics-handler.js';
 
 class GameObject {
     constructor(xPos_, yPos_) {
@@ -11,19 +12,15 @@ class GameObject {
 
     remove() {}
 
-    setGraphicsHandler(graphicsHandler_) {
-        this.g = graphicsHandler_;
-    }    
-
     update(deltaTime_) {}
 
     click() {}
 
     interact(ball_) {}
 
-    render() {
-        this.g.setFillStyle('rgba(255, 0, 255, 1.0)');
-        this.g.square(this.x, this.y, TILE_SIZE, false);
+    render(ctx_) {
+        Graphics.instance.setFillStyle('rgba(255, 0, 255, 1.0)');
+        Graphics.instance.square(ctx_, this.x, this.y, TILE_SIZE, false);
     }
 }
 

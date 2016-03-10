@@ -1,7 +1,7 @@
 import Data from '../game-data.js';
-import AnimationGraphics from '../graphics/animation-graphics.js';
 import {getGridPosition, TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
+import Graphics from '../graphics/graphics-handler.js';
 
 const INIT_OFFSET = 24;
 const SIZE = 12;
@@ -15,11 +15,7 @@ class Ball extends GameObject {
         this.dy = dy_ * TILE_SIZE;
         this.setCurrentTile();
         this.setNextTile();        
-    }
-
-    remove() {
-        AnimationGraphics.instance.removeObject(this);
-    }    
+    } 
 
     update(deltaTime_) {
         this.x = (this.x + this.dx * deltaTime_ + BOARD_SIZE) % BOARD_SIZE;
@@ -59,10 +55,10 @@ class Ball extends GameObject {
         this.currentTile = Data.instance.getObject(this.xPos, this.yPos);
     }
 
-    render() {
-        this.g.setFillStyle('rgba(218, 3, 221, 1.0)');
-        this.g.setStrokeStyle('rgba(214, 145, 199, 1.0)');
-        this.g.square(this.x, this.y, SIZE);
+    render(ctx_) {
+        Graphics.instance.setFillStyle('rgba(218, 3, 221, 1.0)');
+        Graphics.instance.setStrokeStyle('rgba(214, 145, 199, 1.0)');
+        Graphics.instance.square(ctx_, this.x, this.y, SIZE);
     }
 }
 
