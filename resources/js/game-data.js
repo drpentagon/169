@@ -30,7 +30,21 @@ class SceneData {
         this.resetTiles();
         this.resetAnimatedObjects();
         this.resetBalls();
+        this.elapsedTime = 0;
     }
+
+    setLevelTimeout(timeout_) {
+       this.timeout = timeout_; 
+    }
+
+    startTimer() {
+        this.startTime = Date.now();
+        this.elapsedTime = 0;
+    }    
+
+    get levelHasEnded() {
+        return this.elapsedTime >= this.timeout;
+    }    
 
     resetLevelObjects() {
         this.levelMatrix = []
@@ -94,6 +108,8 @@ class SceneData {
     update(deltaTime_) {
         this.animatedObjects.map(o => o.update(deltaTime_));
         this.balls.map(b => b.update(deltaTime_));
+
+        this.elapsedTime = (Date.now() - this.startTime) / 1000;
     }    
 }
 

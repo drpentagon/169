@@ -33,7 +33,7 @@ class Game {
 		this.animationGraphics = new AnimationGraphics(animation_el.getContext("2d"));
 
 		const timer_el = document.querySelector(".timer");		
-		TimerGraphics.instance.setContext(timer_el.getContext("2d"));
+		this.timerGraphics = new TimerGraphics(timer_el.getContext("2d"));
 
 		const text_el = document.querySelector(".canvas--text");
 		Text.instance.setContext(text_el.getContext("2d"));
@@ -64,7 +64,7 @@ class Game {
 
     resetLevel() {
     	Data.instance.resetLevel();
-    	TimerGraphics.instance.reset();
+    	//TimerGraphics.instance.reset();
     	lib.BOUNCES = 0;
     }
 
@@ -72,7 +72,7 @@ class Game {
     	const level = this.levelData.getLevel(0);	
     	this.validateLevel(level);
 
-		TimerGraphics.instance.setGameLength(level.length);
+		Data.instance.setLevelTimeout(level.length);
 		Data.instance.addAnimatedObject(new Goal(level.goal.x, level.goal.y));	
 		level.balls.forEach(b => Data.instance.addBall(new Ball(b.x, b.y, b.dx, b.dy)));
 
@@ -108,7 +108,7 @@ class Game {
     }
 
     startGameLoop() {
-    	TimerGraphics.instance.start();
+    	Data.instance.startTimer();
     	this.now = null;
 		this.then = null;
     	this.gameLoop();
@@ -124,9 +124,9 @@ class Game {
 
 		this.then = this.now;
 		this.animationGraphics.render();	
-		TimerGraphics.instance.update(this.now);
+		this.timerGraphics.render();
 		this.backgroundGraphics.render();
-		if(Data.instance.balls.length > 0 && !TimerGraphics.instance.isEnded) {
+		if(Data.instance.balls.length > 0 && !Data.instance.levelHasEnded) {
 			requestAnimationFrame(() => this.gameLoop());
 		}
 		else {

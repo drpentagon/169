@@ -1,4 +1,4 @@
-import TimerGraphics from './timer-graphics.js';
+import Data from '../game-data.js';
 import {clearCanvas, square} from './graphics-handler.js';
 
 
@@ -9,7 +9,7 @@ class BackgroundGraphics {
 
     render() {
         clearCanvas(this.ctx);
-        let factor = (TimerGraphics.instance.elapsedTime / TimerGraphics.instance.length);
+        let factor = (Data.instance.elapsedTime / Data.instance.timeout);
 
         if(factor > 0.85) {
             factor = 90 * (factor - 0.85)
