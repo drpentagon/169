@@ -30,7 +30,7 @@ class Game {
 		this.levelGraphics = new LevelGraphics(static_el.getContext("2d"));
 
 		const animation_el = document.querySelector(".canvas--animation");
-		AnimationGraphics.instance.setContext(animation_el.getContext("2d"));
+		this.animationGraphics = new AnimationGraphics(animation_el.getContext("2d"));
 
 		const timer_el = document.querySelector(".timer");		
 		TimerGraphics.instance.setContext(timer_el.getContext("2d"));
@@ -123,7 +123,7 @@ class Game {
 		}
 
 		this.then = this.now;
-		AnimationGraphics.instance.render();	
+		this.animationGraphics.render();	
 		TimerGraphics.instance.update(this.now);
 		this.backgroundGraphics.render();
 		if(Data.instance.balls.length > 0 && !TimerGraphics.instance.isEnded) {
@@ -159,13 +159,13 @@ class Game {
 		if(Data.instance.lives >= 0) {
 			this.resetLevel();
 			this.initLevel();
-			AnimationGraphics.instance.clear();
+			this.animationGraphics.clear();
 			Text.instance.clear();
 			Text.instance.writeHeadline("Time out.", 15, 15);
 		} else {
 			this.reset();
 			this.initLevel();
-			AnimationGraphics.instance.clear();
+			this.animationGraphics.clear();
 			Text.instance.clear();
 			Text.instance.writeHeadline("Game over", 15, 15);
 		}
@@ -178,7 +178,7 @@ class Game {
 		Data.instance.score += score + bonus;
 		Data.instance.level++;
 		this.statusGraphics.render();
-		AnimationGraphics.instance.clear();
+		this.animationGraphics.clear();
 		Data.instance.resetLevel();
 		this.renderWalls(this.levelData.getLevel("frame").walls);
 

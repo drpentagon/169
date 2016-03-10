@@ -1,4 +1,4 @@
-import Graphics from './graphics-handler.js';
+import {clearCanvas, square} from './graphics-handler.js';
 
 let instance = null;
 let key = {};
@@ -43,7 +43,7 @@ class TextHandler {
     }
 
     clear() {
-        Graphics.instance.clear(this.ctx);
+        clearCanvas(this.ctx);
     }
 
     write(text_, xPos_, yPos_) {
@@ -53,7 +53,7 @@ class TextHandler {
     	let multiplicator = pixelSize * 4;
     	let i = 0;
 
-    	Graphics.instance.setFillStyle('rgba(255, 255, 255, 0.8)');
+    	this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     	text_.toUpperCase().split('').forEach(ch => {
     		if(this.writeLetter(ch, x_ + i * multiplicator, y_, pixelSize)) {
     			i++;
@@ -69,7 +69,7 @@ class TextHandler {
     	let multiplicator = (pixelSize + spacing) * 3 + 8;
     	let i = 0;
 
-    	Graphics.instance.setFillStyle('rgba(255, 255, 255, 0.8)');
+    	this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     	text_.toUpperCase().split('').forEach(ch => {
     		if(this.writeLetter(ch, x_ + i * multiplicator, y_, pixelSize, spacing)) {
     			i++;
@@ -98,7 +98,7 @@ class TextHandler {
                 let pos = 9 - (str.length - p);
                 let xPos = pos % 3;
                 let yPos = parseInt(pos / 3);
-                Graphics.instance.square(this.ctx, x_ + xPos * (pixelSize_ + spacing_), y_ + yPos * (pixelSize_ + spacing_), pixelSize_, false);
+                square(this.ctx, x_ + xPos * (pixelSize_ + spacing_), y_ + yPos * (pixelSize_ + spacing_), pixelSize_, false);
             }
         }
 

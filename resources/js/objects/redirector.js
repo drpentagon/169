@@ -1,13 +1,13 @@
 import Data from '../game-data.js';
 import {ballBoxCollision, getGridPosition, TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
-import Graphics from '../graphics/graphics-handler.js';
+import {polygon} from '../graphics/graphics-handler.js';
 
-const polygon = [];
-polygon[0] = [{x:8, y:24}, {x:20, y:24}, {x:20, y:40}, {x:36, y:40}, {x:36, y:52}, {x:8, y:52}];
-polygon[1] = [{x:8, y:8}, {x:36, y:8}, {x:36, y:20}, {x:20, y:20}, {x:20, y:36}, {x:8, y:36}];
-polygon[2] = [{x:24, y:8}, {x:52, y:8}, {x:52, y:36}, {x:40, y:36}, {x:40, y:20}, {x:24, y:20}];
-polygon[3] = [{x:40, y:24}, {x:52, y:24}, {x:52, y:52}, {x:24, y:52}, {x:24, y:40}, {x:40, y:40}];
+const polygonSet = [];
+polygonSet[0] = [{x:8, y:24}, {x:20, y:24}, {x:20, y:40}, {x:36, y:40}, {x:36, y:52}, {x:8, y:52}];
+polygonSet[1] = [{x:8, y:8}, {x:36, y:8}, {x:36, y:20}, {x:20, y:20}, {x:20, y:36}, {x:8, y:36}];
+polygonSet[2] = [{x:24, y:8}, {x:52, y:8}, {x:52, y:36}, {x:40, y:36}, {x:40, y:20}, {x:24, y:20}];
+polygonSet[3] = [{x:40, y:24}, {x:52, y:24}, {x:52, y:52}, {x:24, y:52}, {x:24, y:40}, {x:40, y:40}];
 
 class Redirector extends GameObject {
     constructor(x_, y_) {
@@ -106,9 +106,9 @@ class Redirector extends GameObject {
     }    
 
     render(ctx_) {
-        Graphics.instance.setFillStyle('rgba(221, 221, 3, 1.0)');
-        Graphics.instance.setStrokeStyle('rgba(248, 252, 174, 1.0)');
-        Graphics.instance.polygon(ctx_, polygon[this.type].map(o => {
+        ctx_.fillStyle = 'rgba(221, 221, 3, 1.0)';
+        ctx_.strokeStyle = 'rgba(248, 252, 174, 1.0)';
+        polygon(ctx_, polygonSet[this.type].map(o => {
             let p = {};
             p.x = o.x + this.x; 
             p.y = o.y + this.y; 

@@ -1,4 +1,4 @@
-import Graphics from './graphics-handler.js';
+import {clearCanvas, rectangle, fillArea, backgroundRectangle} from './graphics-handler.js';
 
 let instance = null;
 let key = {};
@@ -44,17 +44,17 @@ class Timer {
     }
 
     render() {
-        Graphics.instance.clear(this.ctx);
-        Graphics.instance.setFillStyle('rgba(255, 255, 255, 0.0)');
-        Graphics.instance.setStrokeStyle('rgba(255, 255, 255, 0.5)');
+        clearCanvas(this.ctx);
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.0)';
+        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
 
-        Graphics.instance.rectangle(this.ctx, 0, 0, 732, 20);
+        rectangle(this.ctx, 0, 0, 732, 20);
 
-        Graphics.instance.setFillStyle('rgba(255, 255, 255, 0.10)');
-        Graphics.instance.fillArea(this.ctx, this.dotsLeft, 1,  91 - this.dotsLeft, 1);  
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.10)';
+        fillArea(this.ctx, this.dotsLeft, 1,  91 - this.dotsLeft, 1);  
         for(let x = 1; x < this.dotsLeft; x++) {
-            Graphics.instance.setFillStyle('rgba(255, ' + parseInt(255 * x / 91) + ', 0, 1.0)');
-            Graphics.instance.backgroundRectangle(this.ctx, x,1);
+            this.ctx.fillStyle = 'rgba(255, ' + parseInt(255 * x / 91) + ', 0, 1.0)';
+            backgroundRectangle(this.ctx, x,1);
         }
     }
 }

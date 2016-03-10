@@ -1,7 +1,7 @@
 import Data from '../game-data.js';
 import {getGridPosition, TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
-import Graphics from '../graphics/graphics-handler.js';
+import {square} from '../graphics/graphics-handler.js';
 
 const INIT_OFFSET = 24;
 const SIZE = 12;
@@ -56,9 +56,9 @@ class Ball extends GameObject {
     }
 
     render(ctx_) {
-        Graphics.instance.setFillStyle('rgba(218, 3, 221, 1.0)');
-        Graphics.instance.setStrokeStyle('rgba(214, 145, 199, 1.0)');
-        Graphics.instance.square(ctx_, this.x, this.y, SIZE);
+        ctx_.fillStyle = 'rgba(218, 3, 221, 1.0)';
+        ctx_.strokeStyle = 'rgba(214, 145, 199, 1.0)';
+        square(ctx_, this.x, this.y, SIZE);
     }
 }
 

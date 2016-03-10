@@ -1,13 +1,13 @@
 import Data from '../game-data.js';
 import {TILE_SIZE, ballBoxCollision} from '../game-helper.js';
 import GameObject from './game-object.js';
-import Graphics from '../graphics/graphics-handler.js';
+import {polygon} from '../graphics/graphics-handler.js';
 
-const polygon = []
-polygon[0] = [[8, 8], [20, 8], [20, 40], [40, 40], [40, 8], [52, 8], [52, 52], [8, 52], [8, 8]];
-polygon[1] = [[52, 8], [52, 20], [20, 20], [20, 40], [52, 40], [52, 52], [8, 52], [8, 8], [52, 8]];
-polygon[2] = [[52, 52], [40, 52], [40, 20], [20, 20], [20, 52], [8, 52], [8, 8], [52, 8], [52, 52]];
-polygon[3] = [[8, 8], [52, 8], [52, 52], [8, 52], [8, 40], [40, 40], [40, 20], [8, 20], [8, 8]];
+const polygonSet = []
+polygonSet[0] = [[8, 8], [20, 8], [20, 40], [40, 40], [40, 8], [52, 8], [52, 52], [8, 52], [8, 8]];
+polygonSet[1] = [[52, 8], [52, 20], [20, 20], [20, 40], [52, 40], [52, 52], [8, 52], [8, 8], [52, 8]];
+polygonSet[2] = [[52, 52], [40, 52], [40, 20], [20, 20], [20, 52], [8, 52], [8, 8], [52, 8], [52, 52]];
+polygonSet[3] = [[8, 8], [52, 8], [52, 52], [8, 52], [8, 40], [40, 40], [40, 20], [8, 20], [8, 8]];
 
 class Goal extends GameObject {
     constructor(xPos_, yPos_, rotational = false) {
@@ -40,9 +40,9 @@ class Goal extends GameObject {
     }
 
     render(ctx_) {
-        Graphics.instance.setFillStyle('rgba(218, 3, 221, 1.0)');
-        Graphics.instance.setStrokeStyle('rgba(214, 145, 199, 1.0)');
-        Graphics.instance.polygon(ctx_, polygon[this.type].map(o => {
+        ctx_.fillStyle = 'rgba(218, 3, 221, 1.0)';
+        ctx_.strokeStyle = 'rgba(214, 145, 199, 1.0)';
+        polygon(ctx_, polygonSet[this.type].map(o => {
             let p = {};
             p.x = o[0] + this.x; 
             p.y = o[1] + this.y; 
