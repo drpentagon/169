@@ -1,13 +1,13 @@
 import * as lib from './game-helper.js';
 
-import Stats from './game-stats.js';
-import Background from './scene-background.js';
-import LevelGrapics from './scene-static.js';
-import Animation from './scene-animation.js';
-import Text from './text-handler.js';
+import StatusGraphics from './graphics/status-graphics.js';
+import BackgroundGraphics from './graphics/background-graphics.js';
+import LevelGraphics from './graphics/level-graphics.js';
+import AnimationGraphics from './graphics/animation-graphics.js';
+import Text from './graphics/text-handler.js';
+import TimerGraphics from './graphics/timer-graphics.js';
 
-import Timer from './timer.js';
-import Data from './scene-data.js';
+import Data from './game-data.js';
 import LevelData from './level-data.js';
 
 //Tiles
@@ -34,20 +34,20 @@ class Game {
     }
 
     setupElements() {
-		const stats_el = document.querySelector(".stats");
-		Stats.instance.setContext(stats_el.getContext("2d"));
+		const status_el = document.querySelector(".stats");
+		StatusGraphics.instance.setContext(status_el.getContext("2d"));
 		
 		const background_el = document.querySelector(".canvas--background");
-		Background.instance.setContext(background_el.getContext("2d"));		
+		BackgroundGraphics.instance.setContext(background_el.getContext("2d"));		
 
 		const static_el = document.querySelector(".canvas--static");
-		LevelGrapics.instance.setContext(static_el.getContext("2d"));
+		LevelGraphics.instance.setContext(static_el.getContext("2d"));
 
 		const animation_el = document.querySelector(".canvas--animation");
-		Animation.instance.setContext(animation_el.getContext("2d"));
+		AnimationGraphics.instance.setContext(animation_el.getContext("2d"));
 
 		const timer_el = document.querySelector(".timer");		
-		Timer.instance.setContext(timer_el.getContext("2d"));
+		TimerGraphics.instance.setContext(timer_el.getContext("2d"));
 
 		const text_el = document.querySelector(".canvas--text");
 		Text.instance.setContext(text_el.getContext("2d"));
@@ -69,15 +69,15 @@ class Game {
     }
 
     reset() {
-    	Stats.instance.reset();
-    	Stats.instance.render();
+    	StatusGraphics.instance.reset();
+    	StatusGraphics.instance.render();
     	this.resetLevel();
     }
 
     resetLevel() {
-    	Timer.instance.reset();
-    	LevelGrapics.instance.reset();
-    	Animation.instance.reset();
+    	TimerGraphics.instance.reset();
+    	LevelGraphics.instance.reset();
+    	AnimationGraphics.instance.reset();
     	lib.BOUNCES = 0;
     }
 
@@ -85,27 +85,26 @@ class Game {
     	const level = LevelData.instance.getLevel(0);	
     	this.validateLevel(level);
 
-		Timer.instance.setGameLength(level.length);
+		TimerGraphics.instance.setGameLength(level.length);
 
 		let goal = new Goal(level.goal.x, level.goal.y);
-		Animation.instance.addObject(goal);
+		AnimationGraphics.instance.addObject(goal);
 		Data.instance.addObject(goal);	
 
-		level.balls.forEach(b => Animation.instance.addBall(new Ball(b.x, b.y, b.dx, b.dy)));
+		level.balls.forEach(b => AnimationGraphics.instance.addBall(new Ball(b.x, b.y, b.dx, b.dy)));
 		this.renderWalls(level.walls);
 
-		LevelGrapics.instance.render();
+		LevelGraphics.instance.render();
     }
 
     renderWalls(walls_) {
-    	console.log(walls_.length);
 		walls_.forEach((t) => {
 			switch(Object.keys(t)[0]) {
 			    case "line":
 			    	for(let x = t.line[0][0]; x <= t.line[1][0]; x++) {
 			    		for(let y = t.line[0][1]; y <= t.line[1][1]; y++) {
 							let wall = new Wall(x, y);
-							LevelGrapics.instance.addObject(wall);
+							LevelGraphics.instance.addObject(wall);
 							Data.instance.addObject(wall);				    		
 			    		}
 			    	}
@@ -113,7 +112,7 @@ class Game {
 			    case "points":
 			    	t.points.map(w => {
 						let wall = new Wall(w[0], w[1]);
-						LevelGrapics.instance.addObject(wall);
+						LevelGraphics.instance.addObject(wall);
 						Data.instance.addObject(wall);				    		
 			    	});
 			        break;
@@ -128,7 +127,7 @@ class Game {
     }
 
     startGameLoop() {
-    	Timer.instance.start();
+    	TimerGraphics.instance.start();
     	this.now = null;
 		this.then = null;
     	this.gameLoop();
@@ -139,18 +138,18 @@ class Game {
 
 		if(this.then != null) {
 		 	let delta = (this.now - this.then) / 1000;
-			Animation.instance.update(delta);
+			AnimationGraphics.instance.update(delta);
 		}
 
 		this.then = this.now;
-		Animation.instance.render();	
-		Background.instance.update();
-		Timer.instance.update(this.now);
-		if(Animation.instance.balls.length > 0 && !Timer.instance.isEnded) {
+		AnimationGraphics.instance.render();	
+		BackgroundGraphics.instance.update();
+		TimerGraphics.instance.update(this.now);
+		if(AnimationGraphics.instance.balls.length > 0 && !TimerGraphics.instance.isEnded) {
 			requestAnimationFrame(() => this.gameLoop());
 		}
 		else {
-			if(Animation.instance.balls.length > 0) {
+			if(AnimationGraphics.instance.balls.length > 0) {
 				setTimeout(this.handleLostLife(), 0);			
 			} else {
 				setTimeout(this.handleLevelClear(), 0);			
@@ -170,45 +169,45 @@ class Game {
 			object.click();
 		} else {
 	    	let redirector = new Redirector(x, y);
-	    	Animation.instance.addObject(redirector);
+	    	AnimationGraphics.instance.addObject(redirector);
 	    	Data.instance.addObject(redirector);
 	    }
 	}
 
 	handleLostLife() {
-		Stats.instance.lives--;
-		Stats.instance.render();
+		StatusGraphics.instance.lives--;
+		StatusGraphics.instance.render();
 		
-		if(Stats.instance.lives >= 0) {
+		if(StatusGraphics.instance.lives >= 0) {
 			this.resetLevel();
 			this.initLevel();
-			Animation.instance.clear();
+			AnimationGraphics.instance.clear();
 			Text.instance.clear();
 			Text.instance.writeHeadline("Time out.", 15, 15);
 		} else {
 			this.reset();
 			this.initLevel();
-			Animation.instance.clear();
+			AnimationGraphics.instance.clear();
 			Text.instance.clear();
 			Text.instance.writeHeadline("Game over", 15, 15);
 		}
 	}
 
 	handleLevelClear() {
-		let score = Timer.instance.dotsLeft;
+		let score = TimerGraphics.instance.dotsLeft;
 		let bonus = 100 - lib.BOUNCES;
 		bonus = bonus > 0 ? bonus : 0;
-		Stats.instance.score += score + bonus;
-		Stats.instance.level++;
-		Stats.instance.render();
-		Animation.instance.clear();
+		StatusGraphics.instance.score += score + bonus;
+		StatusGraphics.instance.level++;
+		StatusGraphics.instance.render();
+		AnimationGraphics.instance.clear();
 
-		LevelGrapics.instance.reset();
+		LevelGraphics.instance.reset();
 
 		this.renderWalls(LevelData.instance.getLevel("frame").walls);
 
-		LevelGrapics.instance.clear();
-		LevelGrapics.instance.render();
+		LevelGraphics.instance.clear();
+		LevelGraphics.instance.render();
 
 		Text.instance.clear();
 		Text.instance.writeHeadline("Course", 15, 15);		

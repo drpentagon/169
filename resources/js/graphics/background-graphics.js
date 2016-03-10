@@ -1,4 +1,4 @@
-import Timer from './timer.js';
+import TimerGraphics from './timer-graphics.js';
 import Graphics from './graphics-handler.js';
 
 
@@ -23,7 +23,7 @@ class SceneBackground {
 
     update() {
         this.g.clear();
-        let factor = (Timer.instance.elapsedTime / Timer.instance.length);
+        let factor = (TimerGraphics.instance.elapsedTime / TimerGraphics.instance.length);
 
         if(factor > 0.85) {
             factor = 90 * (factor - 0.85)

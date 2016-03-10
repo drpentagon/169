@@ -1,4 +1,4 @@
-import Data from '../scene-data.js';
+import Data from '../game-data.js';
 import {ballBoxCollision, TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
 

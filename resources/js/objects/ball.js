@@ -1,5 +1,5 @@
-import Data from '../scene-data.js';
-import Animation from '../scene-animation.js';
+import Data from '../game-data.js';
+import AnimationGraphics from '../graphics/animation-graphics.js';
 import {getGridPosition, TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
 
@@ -18,7 +18,7 @@ class Ball extends GameObject {
     }
 
     remove() {
-        Animation.instance.removeObject(this);
+        AnimationGraphics.instance.removeObject(this);
     }    
 
     update(deltaTime_) {
