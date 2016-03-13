@@ -1,3 +1,4 @@
+import {DOT_SIZE, DOT_CC, CELL_SIZE, CELL_SPACING, TILE_CC} from '../game-helper.js';
 import {clearCanvas, square} from './graphics-handler.js';
 
 let instance = null;
@@ -47,31 +48,27 @@ class TextHandler {
     }
 
     write(text_, xPos_, yPos_) {
-    	let x_ = xPos_ * 8;
-    	let y_ = yPos_ * 8;
-    	let pixelSize = 4;
-    	let multiplicator = pixelSize * 4;
+    	let x_ = xPos_ * DOT_CC;
+    	let y_ = yPos_ * DOT_CC;
+    	let multiplicator = DOT_SIZE * 4;
     	let i = 0;
 
     	this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     	text_.toUpperCase().split('').forEach(ch => {
-    		if(this.writeLetter(ch, x_ + i * multiplicator, y_, pixelSize)) {
+    		if(this.writeLetter(ch, x_ + i * multiplicator, y_, DOT_SIZE)) {
     			i++;
     		}
     	});
     }
 
     writeHeadline(text_, xPos_, yPos_, callback_) {
-    	let x_ = xPos_ * 8;
-    	let y_ = yPos_ * 8;
-    	let pixelSize = 12;
-    	let spacing = 4;
-    	let multiplicator = (pixelSize + spacing) * 3 + 8;
+    	let x_ = xPos_ * DOT_CC;
+    	let y_ = yPos_ * DOT_CC;
     	let i = 0;
 
     	this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     	text_.toUpperCase().split('').forEach(ch => {
-    		if(this.writeLetter(ch, x_ + i * multiplicator, y_, pixelSize, spacing)) {
+    		if(this.writeLetter(ch, x_ + i * TILE_CC, y_, CELL_SIZE, CELL_SPACING)) {
     			i++;
     		}
     	});
@@ -98,7 +95,7 @@ class TextHandler {
                 let pos = 9 - (str.length - p);
                 let xPos = pos % 3;
                 let yPos = parseInt(pos / 3);
-                square(this.ctx, x_ + xPos * (pixelSize_ + spacing_), y_ + yPos * (pixelSize_ + spacing_), pixelSize_, false);
+                square(this.ctx, x_ + xPos * (pixelSize_ + spacing_), y_ + yPos * (pixelSize_ + spacing_), pixelSize_);
             }
         }
 

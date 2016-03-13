@@ -1,18 +1,16 @@
-import Data from '../game-data.js';
-import {getGridPosition, TILE_SIZE, BOARD_SIZE} from '../game-helper.js';
 import GameObject from './game-object.js';
-import {square} from '../graphics/graphics-handler.js';
+import Data from '../game-data.js';
 
-const INIT_OFFSET = 24;
-const SIZE = 12;
+import {strokedSquare} from '../graphics/graphics-handler.js';
+import {getGridPosition, TILES, DOT_CC, CELL_SIZE, TILE_CC, BOARD_SIZE} from '../game-helper.js';
 
 class Ball extends GameObject {
     constructor(xPos_, yPos_, dx_, dy_) {
         super(xPos_, yPos_);
-        this.x += INIT_OFFSET;
-        this.y += INIT_OFFSET;
-        this.dx = dx_ * TILE_SIZE;
-        this.dy = dy_ * TILE_SIZE;
+        this.x += 3 * DOT_CC;
+        this.y += 3 * DOT_CC;
+        this.dx = dx_ * TILE_CC;
+        this.dy = dy_ * TILE_CC;
         this.setCurrentTile();
         this.setNextTile();        
     } 
@@ -41,13 +39,12 @@ class Ball extends GameObject {
         let yNext = this.yPos;
 
         if(this.dx !== 0) {
-            xNext = (this.xPos + parseInt(Math.abs(this.dx) / this.dx) + 13) % 13;
+            xNext = (this.xPos + parseInt(Math.abs(this.dx) / this.dx) + TILES) % TILES;
         }
 
         if(this.dy !== 0) {
-            yNext = (this.yPos + parseInt(Math.abs(this.dy) / this.dy) + 13) % 13;
+            yNext = (this.yPos + parseInt(Math.abs(this.dy) / this.dy) + TILES) % TILES;
         } 
-        
         this.nextTile = Data.instance.getObject(xNext, yNext);
     }
 
@@ -58,7 +55,8 @@ class Ball extends GameObject {
     render(ctx_) {
         ctx_.fillStyle = 'rgba(218, 3, 221, 1.0)';
         ctx_.strokeStyle = 'rgba(214, 145, 199, 1.0)';
-        square(ctx_, this.x, this.y, SIZE);
+
+        strokedSquare(ctx_, this.x, this.y, CELL_SIZE);
     }
 }
 

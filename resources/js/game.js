@@ -19,21 +19,13 @@ import Redirector from './objects/redirector.js';
 class Game {
     constructor() {
         this.levelData = new LevelData();
+		document.querySelector('.canvas-wrapper').style.width = lib.BOARD_SIZE + 'px';
 
-		const status_el = document.querySelector(".stats");
-		this.statusGraphics = new StatusGraphics(status_el.getContext("2d"));
-		
-		const background_el = document.querySelector(".canvas--background");
-		this.backgroundGraphics = new BackgroundGraphics(background_el.getContext("2d"));		
-
-		const static_el = document.querySelector(".canvas--static");
-		this.levelGraphics = new LevelGraphics(static_el.getContext("2d"));
-
-		const animation_el = document.querySelector(".canvas--animation");
-		this.animationGraphics = new AnimationGraphics(animation_el.getContext("2d"));
-
-		const timer_el = document.querySelector(".timer");		
-		this.timerGraphics = new TimerGraphics(timer_el.getContext("2d"));
+		this.statusGraphics = new StatusGraphics();
+		this.backgroundGraphics = new BackgroundGraphics();
+		this.levelGraphics = new LevelGraphics();
+		this.animationGraphics = new AnimationGraphics();
+		this.timerGraphics = new TimerGraphics();
 
 		const text_el = document.querySelector(".canvas--text");
 		Text.instance.setContext(text_el.getContext("2d"));
@@ -148,6 +140,7 @@ class Game {
 		if(object) {
 			object.click();
 		} else {
+			Data.instance.redirects++;
 	    	Data.instance.addAnimatedObject(new Redirector(x, y));
 	    }
 	}
@@ -172,28 +165,40 @@ class Game {
 	}
 
 	handleLevelClear() {
-		let score = TimerGraphics.instance.dotsLeft;
-		let bonus = 100 - lib.BOUNCES;
-		bonus = bonus > 0 ? bonus : 0;
-		Data.instance.score += score + bonus;
+		let elapsedTime = parseInt(Data.instance.elapsedTime);
+		let bounces = Data.instance.bounces;
+		let redirects = Data.instance.redirects;
+
+		let timeBonus = parseInt(Data.instance.percentageLeft * 100);
+
+		let bounceBonus = 100 - bounces;
+		bounceBonus = bounceBonus > 0 ? bounceBonus : 0;
+
+		let redirectBonus = (15 - redirects) * 100 / 15;
+		redirectBonus = redirectBonus > 0 ? redirectBonus : 0;
+
+		let totalScore = timeBonus + bounceBonus + redirectBonus;
+
+		Data.instance.score += totalScore;
 		Data.instance.level++;
 		this.statusGraphics.render();
 		this.animationGraphics.clear();
 		Data.instance.resetLevel();
 		this.renderWalls(this.levelData.getLevel("frame").walls);
-
 		this.levelGraphics.clear();
 		this.levelGraphics.render();
 
 		Text.instance.clear();
 		Text.instance.writeHeadline("Course", 15, 15);		
 		Text.instance.writeHeadline("Clear", 15, 22);		
-		Text.instance.write("score", 15, 36);		
-		Text.instance.write("" + score, 43, 36);
-		Text.instance.write("Bonus", 15, 43);
-		Text.instance.write("" + bonus, 43, 43);
-		Text.instance.write("total", 15, 50);
-		Text.instance.write("" + (score + bonus), 43, 50);
+		Text.instance.write("time", 15, 36);		
+		Text.instance.write("" + elapsedTime, 50, 36);
+		Text.instance.write("Bounces", 15, 43);
+		Text.instance.write("" + bounces, 50, 43);
+		Text.instance.write("Redirects", 15, 50);
+		Text.instance.write("" + redirects, 50, 50);		
+		Text.instance.write("score", 15, 57);
+		Text.instance.write("" + totalScore, 50, 57);
 	}
 }
 

@@ -2,39 +2,42 @@
 
 body {
 	background:#051e06;
-//	background:#0a062e;	
+	//background:#0a062e;	
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .canvas-wrapper {
-	width:732px;
-	height:788px;
 	display:block;
 	margin:50px auto;
 	position:relative;
 }
 
+.graphics-wrapper {
+	position:relative;
+}
+
 .canvas {
 	display:block;
-	position:absolute;
-	width:732px;
-	height:732px;
-	top:32px;
+	top:0px;
 
 	&--background {
 		z-index:1;
+		position:relative;
 	}
 
 	&--static {
 		z-index:2;
+		position:absolute;
 	}	
 
 	&--animation {
 		z-index:3;
+		position:absolute;
 	}
 
 	&--text {
 		z-index:4;
+		position:absolute;
 		cursor:pointer;
 		display:none;
 		&.show {
@@ -46,17 +49,12 @@ body {
 .stats {
 	box-sizing: border-box;
 	display:block;
-	height:28px;
-	position:absolute;
-	top:0px;
+	position:relative;
 	width:100%;
 }
 
 .timer {
 	box-sizing: border-box;
 	display:block;
-	height:20px;
-	position:absolute;
-	top:768px;
 	width:100%;
 }

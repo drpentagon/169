@@ -31,6 +31,8 @@ class SceneData {
         this.resetAnimatedObjects();
         this.resetBalls();
         this.elapsedTime = 0;
+        this.bounces = 0;
+        this.redirects = 0;
     }
 
     setLevelTimeout(timeout_) {
@@ -40,6 +42,7 @@ class SceneData {
     startTimer() {
         this.startTime = Date.now();
         this.elapsedTime = 0;
+        this.percentageLeft = 1;
     }    
 
     get levelHasEnded() {
@@ -110,6 +113,7 @@ class SceneData {
         this.balls.map(b => b.update(deltaTime_));
 
         this.elapsedTime = (Date.now() - this.startTime) / 1000;
+        this.percentageLeft = (this.timeout - this.elapsedTime) / this.timeout;
     }    
 }
 

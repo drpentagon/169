@@ -1,50 +1,32 @@
 import Data from '../game-data.js';
-import {clearCanvas, fillArea, rectangle} from './graphics-handler.js';
+
+import {DOT_SIZE, DOT_SPACING, DOT_CC, BOARD_SIZE} from '../game-helper.js';
+import {createCanvas, clearCanvas, fillArea, rectangle} from './graphics-handler.js';
 
 class StatusGraphics {
     constructor(ctx_) {
-        this.ctx = ctx_;
+        this.height = DOT_CC * 3 + DOT_SIZE;
+
+        const canvas = createCanvas('stats', BOARD_SIZE, this.height + DOT_SPACING);
+        document.querySelector('.stats-wrapper').appendChild(canvas);
+        this.ctx = canvas.getContext("2d");
     }
 
     render() {
         clearCanvas(this.ctx);
-        this.renderLives(Data.instance.lives);
-        this.renderLevel(Data.instance.level);
-        this.renderScore(Data.instance.score);
+        this.fillPoints(1, Data.instance.lives, 10, 'rgba(218, 3, 221, 1.0)');
+        this.fillPoints(13, Data.instance.level, 50);
+        this.fillPoints(65, Math.floor(Data.instance.score / 1000) % 10, 5);        
+        this.fillPoints(72, Math.floor(Data.instance.score / 100) % 10, 5);        
+        this.fillPoints(79, Math.floor(Data.instance.score / 10) % 10, 5);        
+        this.fillPoints(86, Data.instance.score % 10, 5);        
     }
 
-    renderLives(lives_) {
-        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.0)';
+    fillPoints(offset_, points_, width_, fillStyle_ = 'rgba(255, 255, 255, 1.0)') {
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.0)';
         this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-        rectangle(this.ctx, 0, 0, 92, 28);
+        rectangle(this.ctx, (offset_ - 1) * DOT_CC , 0, (width_ + 1) * DOT_CC + DOT_SIZE, this.height);        
 
-        this.fillPoints(1, lives_, 10, 'rgba(218, 3, 221, 1.0)');
-    }
-
-    renderLevel(level_) {
-        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.0)';
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-        rectangle(this.ctx, 96, 0, 412, 28);
-
-        this.fillPoints(13, level_, 50, 'rgba(255, 255, 255, 1.0)');        
-    }
-
-    renderScore(score_) {
-        this.renderScorePart(512, 65, Math.floor(score_ / 1000) % 10);
-        this.renderScorePart(568, 72, Math.floor(score_ / 100) % 10);
-        this.renderScorePart(624, 79, Math.floor(score_ / 10) % 10);
-        this.renderScorePart(680, 86, score_ % 10);
-    }
-
-    renderScorePart(x_, offset_, points_) {
-        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.0)';
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-        rectangle(this.ctx, x_, 0, 52, 28);        
-     
-        this.fillPoints(offset_, points_, 5, 'rgba(255, 255, 255, 1.0)');        
-    }
-
-    fillPoints(offset_, points_, width_, fillStyle_) {
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
         fillArea(this.ctx, offset_, 1, width_, 2); 
 
