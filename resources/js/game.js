@@ -184,7 +184,6 @@ class Game {
 		this.statusGraphics.render();
 		this.animationGraphics.clear();
 		Data.instance.resetLevel();
-		this.renderWalls(this.levelData.getLevel("frame").walls);
 		this.levelGraphics.clear();
 		this.levelGraphics.render();
 

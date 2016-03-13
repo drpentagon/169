@@ -2,16 +2,6 @@ class LevelData {
     constructor() {
         this.levels = {};
 
-        this.levels["frame"] = {
-            "name":"text frame",
-            "walls": [
-                {"line":[[0,0],[12,0]]},
-                {"line":[[0,12],[12,12]]},
-                {"line":[[0,1],[0,11]]},
-                {"line":[[12,1],[12,11]]},
-            ],
-        };        
-
         this.levels["0"] = {
             "name":"Demo",
             background:"rgb(0,0,0)",
