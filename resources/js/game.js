@@ -174,7 +174,7 @@ class Game {
 		let bounceBonus = 100 - bounces;
 		bounceBonus = bounceBonus > 0 ? bounceBonus : 0;
 
-		let redirectBonus = (15 - redirects) * 100 / 15;
+		let redirectBonus = parseInt((15 - redirects) * 100 / 15);
 		redirectBonus = redirectBonus > 0 ? redirectBonus : 0;
 
 		let totalScore = timeBonus + bounceBonus + redirectBonus;
@@ -192,13 +192,13 @@ class Game {
 		Text.instance.writeHeadline("Course", 15, 15);		
 		Text.instance.writeHeadline("Clear", 15, 22);		
 		Text.instance.write("time", 15, 36);		
-		Text.instance.write("" + elapsedTime, 50, 36);
+		Text.instance.write("" + elapsedTime, 57, 36);
 		Text.instance.write("Bounces", 15, 43);
-		Text.instance.write("" + bounces, 50, 43);
+		Text.instance.write("" + bounces, 57, 43);
 		Text.instance.write("Redirects", 15, 50);
-		Text.instance.write("" + redirects, 50, 50);		
+		Text.instance.write("" + redirects, 57, 50);		
 		Text.instance.write("score", 15, 57);
-		Text.instance.write("" + totalScore, 50, 57);
+		Text.instance.write("" + totalScore, 57, 57);
 	}
 }
 

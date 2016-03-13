@@ -1,4 +1,4 @@
-import {DOT_SIZE, DOT_CC, CELL_SIZE, CELL_SPACING, TILE_CC} from '../game-helper.js';
+import {DOT_SIZE, DOT_SPACING, DOT_CC, CELL_SIZE, CELL_SPACING, TILE_CC} from '../game-helper.js';
 import {clearCanvas, square} from './graphics-handler.js';
 
 let instance = null;
@@ -50,12 +50,12 @@ class TextHandler {
     write(text_, xPos_, yPos_) {
     	let x_ = xPos_ * DOT_CC;
     	let y_ = yPos_ * DOT_CC;
-    	let multiplicator = DOT_SIZE * 4;
+    	let multiplicator = DOT_CC * 4;
     	let i = 0;
 
     	this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     	text_.toUpperCase().split('').forEach(ch => {
-    		if(this.writeLetter(ch, x_ + i * multiplicator, y_, DOT_SIZE)) {
+    		if(this.writeLetter(ch, x_ + i * multiplicator, y_, DOT_SIZE, DOT_SPACING)) {
     			i++;
     		}
     	});
