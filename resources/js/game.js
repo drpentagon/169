@@ -4,8 +4,9 @@ import StatusGraphics from './graphics/status-graphics.js';
 import BackgroundGraphics from './graphics/background-graphics.js';
 import LevelGraphics from './graphics/level-graphics.js';
 import AnimationGraphics from './graphics/animation-graphics.js';
-import Text from './graphics/text-handler.js';
 import TimerGraphics from './graphics/timer-graphics.js';
+
+import DialogueHandler from './graphics/dialogue-handler.js';
 
 import Data from './game-data.js';
 import LevelData from './level-data.js';
@@ -26,12 +27,9 @@ class Game {
 		this.levelGraphics = new LevelGraphics();
 		this.animationGraphics = new AnimationGraphics();
 		this.timerGraphics = new TimerGraphics();
+		this.dialogueHandler = new DialogueHandler();
 
-		const text_el = document.querySelector(".canvas--text");
-		Text.instance.setContext(text_el.getContext("2d"));
-		Text.instance.setCanvasElement(text_el);
-
-		Text.instance.setCallback(() => {
+		this.dialogueHandler.setCallback(() => {
 			this.startGameLoop();		
 		});		
 
@@ -56,7 +54,6 @@ class Game {
 
     resetLevel() {
     	Data.instance.resetLevel();
-    	//TimerGraphics.instance.reset();
     	lib.BOUNCES = 0;
     }
 
@@ -153,14 +150,12 @@ class Game {
 			this.resetLevel();
 			this.initLevel();
 			this.animationGraphics.clear();
-			Text.instance.clear();
-			Text.instance.writeHeadline("Time out.", 15, 15);
+			this.dialogueHandler.ballLost();
 		} else {
 			this.reset();
 			this.initLevel();
 			this.animationGraphics.clear();
-			Text.instance.clear();
-			Text.instance.writeHeadline("Game over", 15, 15);
+			this.dialogueHandler.gameOver();
 		}
 	}
 
@@ -177,27 +172,17 @@ class Game {
 		let redirectBonus = parseInt((15 - redirects) * 100 / 15);
 		redirectBonus = redirectBonus > 0 ? redirectBonus : 0;
 
-		let totalScore = timeBonus + bounceBonus + redirectBonus;
+		let score = timeBonus + bounceBonus + redirectBonus;
 
-		Data.instance.score += totalScore;
+		Data.instance.score += score;
 		Data.instance.level++;
+		Data.instance.resetLevel();
+
 		this.statusGraphics.render();
 		this.animationGraphics.clear();
-		Data.instance.resetLevel();
 		this.levelGraphics.clear();
-		this.levelGraphics.render();
 
-		Text.instance.clear();
-		Text.instance.writeHeadline("Course", 15, 15);		
-		Text.instance.writeHeadline("Clear", 15, 22);		
-		Text.instance.write("time", 15, 36);		
-		Text.instance.write("" + elapsedTime, 57, 36);
-		Text.instance.write("Bounces", 15, 43);
-		Text.instance.write("" + bounces, 57, 43);
-		Text.instance.write("Redirects", 15, 50);
-		Text.instance.write("" + redirects, 57, 50);		
-		Text.instance.write("score", 15, 57);
-		Text.instance.write("" + totalScore, 57, 57);
+		this.dialogueHandler.levelClear(elapsedTime, bounces, redirects, score);
 	}
 }
 

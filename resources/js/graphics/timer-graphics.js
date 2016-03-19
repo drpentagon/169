@@ -13,8 +13,7 @@ class TimerGraphics {
     }
 
     render() {
-        let percentageLeft = (Data.instance.timeout - Data.instance.elapsedTime) / Data.instance.timeout;
-        let dotsLeft = parseInt((DOTS - 1) * percentageLeft);
+        let dotsLeft = parseInt((DOTS - 1) * Data.instance.percentageLeft);
         clearCanvas(this.ctx);
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.translate(0, DOT_SPACING);

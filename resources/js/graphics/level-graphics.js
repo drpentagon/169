@@ -3,10 +3,14 @@ import {TILES, DOTS_PER_TILE, DOTS, BOARD_SIZE} from '../game-helper.js';
 import {createCanvas, clearCanvas, fillArea} from './graphics-handler.js';
 
 class LevelGraphics {
-    constructor() {
-        const canvas = createCanvas('canvas canvas--static', BOARD_SIZE, BOARD_SIZE);
-        document.querySelector('.graphics-wrapper').appendChild(canvas);
-        this.ctx = canvas.getContext("2d");
+    constructor(ctx_) {
+        if(ctx_) {
+            this.ctx = ctx_;
+        } else {
+            const canvas = createCanvas('canvas canvas--static', BOARD_SIZE, BOARD_SIZE);
+            document.querySelector('.graphics-wrapper').appendChild(canvas);
+            this.ctx = canvas.getContext("2d");
+        }
     }
 
     clear() {
@@ -15,10 +19,15 @@ class LevelGraphics {
 
     render() {
         clearCanvas(this.ctx);
+        this.renderBackground();
+        this.drawTiles();
+    }
+
+    renderBackground() {
+        clearCanvas(this.ctx);
         this.drawGrid();
         this.drawClickPattern();
-        this.drawSquares();
-        this.drawTiles();
+        this.drawSquares();        
     }
 
     drawTiles() {

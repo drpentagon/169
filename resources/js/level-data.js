@@ -5,7 +5,7 @@ class LevelData {
         this.levels["0"] = {
             "name":"Demo",
             background:"rgb(0,0,0)",
-            "length":45,
+            "length":50,
             "bounce-limit":100,
             "goal": {
                 "rotates":true,
