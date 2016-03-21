@@ -3,9 +3,9 @@ class LevelData {
         this.levels = {};
 
         this.levels["0"] = {
-            "name":"Demo",
+            "name":"just do it",
             background:"rgb(0,0,0)",
-            "length":50,
+            "length":5,
             "bounce-limit":100,
             "goal": {
                 "rotates":true,
@@ -26,7 +26,7 @@ class LevelData {
                     [1,8], [3,8], [5,8], [7,8], [9,8], [11,8]]},
             ],
             "balls": [
-                {"x":3, "y":3, "dx":3, "dy":0},
+                {"x":11, "y":3, "dx":3, "dy":0},
                 {"x":11, "y":11, "dx":0, "dy":3},
                 {"x":1, "y":11, "dx":6, "dy":0},
                 {"x":2, "y":2, "dx":0, "dy":4},

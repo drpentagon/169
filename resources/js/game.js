@@ -29,10 +29,6 @@ class Game {
 		this.timerGraphics = new TimerGraphics();
 		this.dialogueHandler = new DialogueHandler();
 
-		this.dialogueHandler.setCallback(() => {
-			this.startGameLoop();		
-		});		
-
 		this.setupInteraction();
     }
 
@@ -49,6 +45,7 @@ class Game {
     reset() {
     	Data.instance.resetAll();
     	this.statusGraphics.render();
+    	this.timerGraphics.render();
     	this.resetLevel();
     }
 
@@ -61,12 +58,18 @@ class Game {
     	const level = this.levelData.getLevel(0);	
     	this.validateLevel(level);
 
-		Data.instance.setLevelTimeout(level.length);
-		Data.instance.addAnimatedObject(new Goal(level.goal.x, level.goal.y));	
-		level.balls.forEach(b => Data.instance.addBall(new Ball(b.x, b.y, b.dx, b.dy)));
+		this.dialogueHandler.setCallback(() => {
+			Data.instance.setLevelTimeout(level.length);
+			Data.instance.addAnimatedObject(new Goal(level.goal.x, level.goal.y));	
+			level.balls.forEach(b => Data.instance.addBall(new Ball(b.x, b.y, b.dx, b.dy)));
 
-		this.renderWalls(level.walls);
-		this.levelGraphics.render();
+			this.renderWalls(level.walls);
+			this.levelGraphics.render();
+
+			this.startGameLoop();		
+		});		    	
+
+		this.dialogueHandler.levelIntroduction(level.name);
     }
 
     renderWalls(walls_) {
@@ -160,19 +163,16 @@ class Game {
 	}
 
 	handleLevelClear() {
-		let elapsedTime = parseInt(Data.instance.elapsedTime);
-		let bounces = Data.instance.bounces;
-		let redirects = Data.instance.redirects;
-
 		let timeBonus = parseInt(Data.instance.percentageLeft * 100);
-
-		let bounceBonus = 100 - bounces;
+		let bounceBonus = 100 - Data.instance.bounces;
 		bounceBonus = bounceBonus > 0 ? bounceBonus : 0;
 
-		let redirectBonus = parseInt((15 - redirects) * 100 / 15);
+		let redirectBonus = parseInt((15 - Data.instance.redirects) * 100 / 15);
 		redirectBonus = redirectBonus > 0 ? redirectBonus : 0;
 
 		let score = timeBonus + bounceBonus + redirectBonus;
+
+		this.dialogueHandler.levelClear(parseInt(Data.instance.elapsedTime), Data.instance.bounces, Data.instance.redirects, score);
 
 		Data.instance.score += score;
 		Data.instance.level++;
@@ -181,12 +181,9 @@ class Game {
 		this.statusGraphics.render();
 		this.animationGraphics.clear();
 		this.levelGraphics.clear();
-
-		this.dialogueHandler.levelClear(elapsedTime, bounces, redirects, score);
 	}
 }
 
 const game = new Game();
 game.reset();
 game.initLevel();
-game.startGameLoop();

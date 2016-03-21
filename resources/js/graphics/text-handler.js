@@ -33,7 +33,7 @@ export function write(ctx_, text_, xPos_, yPos_) {
 	});
 }
 
-export function writeHeadline(ctx_, text_, xPos_, yPos_, callback_) {
+export function writeHeadline(ctx_, text_, xPos_, yPos_) {
 	let x_ = xPos_ * DOT_CC;
 	let y_ = yPos_ * DOT_CC;
 	let i = 0;
@@ -44,6 +44,14 @@ export function writeHeadline(ctx_, text_, xPos_, yPos_, callback_) {
 			i++;
 		}
 	});
+}
+
+export function writeHuge(ctx_, text_) {
+    let x_ = 15 * DOT_CC;
+    let y_ = 15 * DOT_CC;
+
+    ctx_.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    writeLetter(ctx_, text_, x_, y_, TILE_CC * 2 + 6 * DOT_CC, DOT_CC);
 }
 
 function writeLetter(ctx_, letter_, x_, y_, pixelSize_, spacing_ = 0) {
