@@ -27,9 +27,9 @@ class Ball extends GameObject {
             this.setNextTile();
         }
 
-        if(this.currentTile) {
+        if(this.currentTile && this.x + CELL_SIZE > this.currentTile.xMin && this.y + CELL_SIZE > this.currentTile.yMin) {
             this.currentTile.interact(this);            
-        } else if(this.nextTile) {
+        } else if(this.nextTile && this.x + CELL_SIZE > this.nextTile.xMin && this.y + CELL_SIZE > this.nextTile.yMin) {
             this.nextTile.interact(this);
         }
     }

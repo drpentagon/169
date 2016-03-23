@@ -2,7 +2,7 @@ import GameObject from './game-object.js';
 import Data from '../game-data.js';
 
 import {polygon} from '../graphics/graphics-handler.js';
-import {ballBoxCollision, getGridPosition, DOT_SIZE, DOT_CC, TILE_SIZE, TILE_CC, BOARD_SIZE} from '../game-helper.js';
+import {ballBoxCollision, DOT_SIZE, DOT_CC, CELL_SIZE, TILE_SIZE, TILE_CC, BOARD_SIZE} from '../game-helper.js';
 
 
 
@@ -17,11 +17,13 @@ const polygonSet = [[p1, p3], [p2, p3], [p2, p5], [p4, p5], [p4, p6], [p1, p6], 
 const OFFSET = 3 * DOT_CC;
 
 class Redirector extends GameObject {
-    constructor(x_, y_) {
-        const pos = getGridPosition(x_, y_);
-        super(pos.x, pos.y);
+    constructor(xPos_, yPos_, type_ = 0, static_ = false) {
+        super(xPos_, yPos_);
+        this.type = type_;
+        this.static = static_;
         this.clicks = 0;
-        this.setType(x_, y_);
+
+        console.log(this);
     }
 
     setType(x_, y_) {
@@ -40,20 +42,25 @@ class Redirector extends GameObject {
     }
 
     remove() {
-        Data.instance.removeObject(this);
-        this.state = 'removed';
+        if(!this.static) {
+            Data.instance.removeObject(this);
+            this.state = 'removed'; 
+        }
     }    
 
     click() {
-        this.clicks++;
-        this.type = (this.type + 2) % 4;
-        if(this.clicks >= 2)
-            this.remove();
+        if(!this.static) {
+            this.clicks++;
+            this.type = (this.type + 2) % 4;
+            if(this.clicks >= 2)
+                this.remove();            
+        }
     }
 
     interact(ball_) {
         if(this.state !== 'removed') {
             if(ball_.dx > 0) {
+                console.log("ball_.dx > 0");
                 if(this.type === 2 || this.type === 3) {
                     if(ball_.x > this.x + OFFSET) {
                         ball_.x = this.x + OFFSET;
@@ -65,6 +72,7 @@ class Redirector extends GameObject {
                     this.checkBackCollision(ball_)
                 }
             } else if(ball_.dx < 0) {
+                console.log("ball_.dx < 0");
                 if(this.type === 0 || this.type === 1) {
                     if(ball_.x < this.x + OFFSET) {
                         ball_.x = this.x + OFFSET;
@@ -102,16 +110,40 @@ class Redirector extends GameObject {
     }
 
     checkBackCollision(ball_) {
-        if(ballBoxCollision(ball_, this.xMin, this.xMax, this.yMin, this.yMax)) {
-            this.remove();
-        }
+        if(ball_.dx < 0) { 
+            if(ballBoxCollision(ball_, this.xMax - CELL_SIZE, this.xMax, this.yMin, this.yMax)) {
+                this.remove();
+            }
+        } else if(ball_.dx > 0) {
+            if(ballBoxCollision(ball_, this.xMin, this.xMin + CELL_SIZE, this.yMin, this.yMax)) {
+                this.remove();
+            }
+        } else if(ball_.dy < 0) {
+            if(ballBoxCollision(ball_, this.xMin, this.xMax, this.yMax - CELL_SIZE, this.yMax)) {
+                this.remove();
+            }
+        } else if(ball_.dy > 0) {
+            if(ballBoxCollision(ball_, this.xMin, this.xMax, this.yMin, this.yMin + CELL_SIZE)) {
+                this.remove();
+            }
+        } 
     }    
 
     render(ctx_) {
         ctx_.translate(TILE_SIZE / 2 + DOT_CC, TILE_SIZE / 2 + DOT_CC);
-        ctx_.rotate(this.type * Math.PI / 2 );        
-        ctx_.fillStyle = 'rgba(221, 221, 3, 1.0)';
-        ctx_.strokeStyle = 'rgba(248, 252, 174, 1.0)';        
+        ctx_.rotate(this.type * Math.PI / 2 );
+        if(this.static) {
+            ctx_.fillStyle = 'rgba(255, 255, 255, 1.0)';
+            ctx_.globalCompositeOperation = 'destination-out';
+            polygon(ctx_, polygonSet);
+            ctx_.globalCompositeOperation = 'source-over';
+            ctx_.fillStyle = 'rgba(255, 255, 255, 0.0)';
+            ctx_.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+        } else {
+            ctx_.fillStyle = 'rgba(221, 221, 3, 1.0)';
+            ctx_.strokeStyle = 'rgba(248, 252, 174, 1.0)';        
+        }
+
         polygon(ctx_, polygonSet);
     }
 }

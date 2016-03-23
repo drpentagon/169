@@ -62,8 +62,8 @@ class Game {
 			Data.instance.setLevelTimeout(level.length);
 			Data.instance.addAnimatedObject(new Goal(level.goal.x, level.goal.y));	
 			level.balls.forEach(b => Data.instance.addBall(new Ball(b.x, b.y, b.dx, b.dy)));
-
-			this.renderWalls(level.walls);
+			this.addWalls(level.walls);
+			this.addRedirectors(level.redirectors);
 			this.levelGraphics.render();
 
 			this.startGameLoop();		
@@ -72,7 +72,8 @@ class Game {
 		this.dialogueHandler.levelIntroduction(level.name);
     }
 
-    renderWalls(walls_) {
+    addWalls(walls_) {
+    	if(walls_ == null) return;
 		walls_.forEach((t) => {
 			switch(Object.keys(t)[0]) {
 			    case "line":
@@ -93,9 +94,17 @@ class Game {
 		});
     }
 
+    addRedirectors(redirectors_) {
+    	if(redirectors_ == null) return;
+
+    	redirectors_.forEach((r) => { 
+    		Data.instance.addTile(new Redirector(r.x, r.y, r.type, r.static));
+    	});
+    }
+
     validateLevel(level_) {
     	/*	
-    		should have time limit, name, goal, and at least one ball
+    		should have time limit, name, goal, and at least one ball, redirects with right type
     	*/
     }
 
@@ -140,8 +149,10 @@ class Game {
 		if(object) {
 			object.click();
 		} else {
+        	const redirector = new Redirector(pos.x, pos.y)
+        	redirector.setType(x, y);
 			Data.instance.redirects++;
-	    	Data.instance.addAnimatedObject(new Redirector(x, y));
+	    	Data.instance.addAnimatedObject(redirector);
 	    }
 	}
 
