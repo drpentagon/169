@@ -60,24 +60,24 @@ class Redirector extends GameObject {
     interact(ball_) {
         if(this.state !== 'removed') {
             if(ball_.dx > 0) {
-                console.log("ball_.dx > 0");
                 if(this.type === 2 || this.type === 3) {
                     if(ball_.x > this.x + OFFSET) {
                         ball_.x = this.x + OFFSET;
                         ball_.dy = this.type == 2 ? ball_.dx : -ball_.dx;
                         ball_.dx = 0;
+                        Data.instance.bounces++;
                         this.remove();
                     }
                 } else {
                     this.checkBackCollision(ball_)
                 }
             } else if(ball_.dx < 0) {
-                console.log("ball_.dx < 0");
                 if(this.type === 0 || this.type === 1) {
                     if(ball_.x < this.x + OFFSET) {
                         ball_.x = this.x + OFFSET;
                         ball_.dy = this.type == 0 ? ball_.dx : -ball_.dx;
                         ball_.dx = 0;
+                        Data.instance.bounces++;
                         this.remove();
                     }
                 } else {
@@ -89,6 +89,7 @@ class Redirector extends GameObject {
                         ball_.y = this.y + OFFSET;
                         ball_.dx = this.type == 0 ? ball_.dy : -ball_.dy;
                         ball_.dy = 0;
+                        Data.instance.bounces++;
                         this.remove();
                     }
                 } else {
@@ -100,6 +101,7 @@ class Redirector extends GameObject {
                         ball_.y = this.y + OFFSET;
                         ball_.dx = this.type == 2 ? ball_.dy : -ball_.dy;
                         ball_.dy = 0;
+                        Data.instance.bounces++;
                         this.remove();
                     }
                 } else {
@@ -112,18 +114,22 @@ class Redirector extends GameObject {
     checkBackCollision(ball_) {
         if(ball_.dx < 0) { 
             if(ballBoxCollision(ball_, this.xMax - CELL_SIZE, this.xMax, this.yMin, this.yMax)) {
+                Data.instance.bounces++;
                 this.remove();
             }
         } else if(ball_.dx > 0) {
             if(ballBoxCollision(ball_, this.xMin, this.xMin + CELL_SIZE, this.yMin, this.yMax)) {
+                Data.instance.bounces++;
                 this.remove();
             }
         } else if(ball_.dy < 0) {
             if(ballBoxCollision(ball_, this.xMin, this.xMax, this.yMax - CELL_SIZE, this.yMax)) {
+                Data.instance.bounces++;
                 this.remove();
             }
         } else if(ball_.dy > 0) {
             if(ballBoxCollision(ball_, this.xMin, this.xMax, this.yMin, this.yMin + CELL_SIZE)) {
+                Data.instance.bounces++;
                 this.remove();
             }
         } 

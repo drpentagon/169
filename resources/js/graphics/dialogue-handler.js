@@ -1,7 +1,7 @@
 import LevelGraphics from './level-graphics.js';
 import {BOARD_SIZE} from '../game-helper.js';
 import {createCanvas, clearCanvas} from './graphics-handler.js';
-import {write, writeHeadline, writeHuge} from './text-handler.js';
+import {write, writeMini, writeHeadline, writeHuge} from './text-handler.js';
 
 class DialogueHandler {
 	constructor() {
@@ -21,7 +21,7 @@ class DialogueHandler {
     	switch(this.dialogue) {
     		case "countdown":
     			this.dialogue = "locked";
-    			this.countdown(5);
+    			this.countdown(3);
     			break;
 
     		case "locked":
@@ -42,16 +42,16 @@ class DialogueHandler {
 
 	levelIntroduction(levelName_) {
 		this.reset();
-		this.background.renderBackground();
+		this.renderBackground();
 
-		writeHeadline(this.ctx, "Next up:", 8, 29);		
-		writeHeadline(this.ctx, levelName_, 8, 43);
+		//writeHeadline(this.ctx, "Next level", 1, 22);		
+		writeHeadline(this.ctx, levelName_, 1, 36);
 		this.dialogue = "countdown";		
 	}
 
 	countdown(number_) {
 		this.reset();
-		this.background.renderBackground();		
+		this.renderBackground();		
 		writeHuge(this.ctx, number_);
 
 		if(number_ > 0) {
@@ -78,7 +78,7 @@ class DialogueHandler {
 
 	levelClear(elapsedTime_, bounces_, redirects_, score_) {
 		this.reset();
-		this.background.renderBackground();
+		this.renderBackground();
 
 		writeHeadline(this.ctx, "Course", 15, 15);		
 		writeHeadline(this.ctx, "Clear", 15, 22);		
@@ -90,6 +90,16 @@ class DialogueHandler {
 		write(this.ctx, "" + redirects_, 57, 50);		
 		write(this.ctx, "score", 15, 57);
 		write(this.ctx, "" + score_, 57, 57);
+	}
+
+	showErrorLog(error_, log_) {
+		this.reset();
+		this.renderBackground();		
+		write(this.ctx, error_, 8, 8);
+		for(let row = 0; row < log_.length; row++) {
+			writeMini(this.ctx, log_[row], 8, 15 + row * 2);	
+		}
+
 	}
 
 	renderBackground() {

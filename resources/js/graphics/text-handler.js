@@ -17,7 +17,17 @@ const letters = {
     "6": 0b100111111, "7": 0b111001001, "8": 0b011111111,
     "9": 0b111111001,
     
-};        
+};
+
+export function stringLength(str_) {
+    let length = 0;
+
+    str_.toUpperCase().split('').forEach(ch => {
+        if(letters[ch]) length++;
+    });
+
+    return length;
+}    
 
 export function write(ctx_, text_, xPos_, yPos_) {
 	let x_ = xPos_ * DOT_CC;
@@ -52,6 +62,20 @@ export function writeHuge(ctx_, text_) {
 
     ctx_.fillStyle = 'rgba(255, 255, 255, 0.8)';
     writeLetter(ctx_, text_, x_, y_, TILE_CC * 2 + 6 * DOT_CC, DOT_CC);
+}
+
+export function writeMini(ctx_, text_, xPos_, yPos_) {
+    let x_ = xPos_ * DOT_CC;
+    let y_ = yPos_ * DOT_CC;
+    let multiplicator = 8;
+    let i = 0;
+
+    ctx_.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    text_.toUpperCase().split('').forEach(ch => {
+        if(writeLetter(ctx_, ch, x_ + i * multiplicator, y_, 2, 0)) {
+            i++;
+        }
+    });
 }
 
 function writeLetter(ctx_, letter_, x_, y_, pixelSize_, spacing_ = 0) {

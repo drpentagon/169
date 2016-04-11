@@ -36,7 +36,8 @@ class Goal extends GameObject {
         const maxOffset = 5 * DOT_CC;
         if(ballBoxCollision(ball_, this.x + minOffset, this.x + maxOffset, this.y + minOffset, this.y + maxOffset)) {
             Data.instance.removeBall(ball_);
-            this.type = (this.type + 1) % 4;
+            if(this.rotational)
+                this.type = (this.type + 1) % 4;
         }
     }
 

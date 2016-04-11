@@ -33,13 +33,19 @@ module.exports = {
     },
   	plugins: PROD ? [
   		new ExtractTextPlugin("main.css"),
-    	new webpack.optimize.UglifyJsPlugin({minimize: true})
+    	new webpack.optimize.UglifyJsPlugin({minimize: true}),
+      new webpack.DefinePlugin({
+          'process.env': {
+            'NODE_ENV': JSON.stringify('production')
+          }
+        })      
   	] : [
-		new ExtractTextPlugin("main.css"),
+		  new ExtractTextPlugin("main.css"),
   	],
 	stats: {		
 		colors: true
 	},
     // Create Sourcemaps for the bundle
-    devtool: 'source-map',    
+    //devtool: 'cheap-module-source-map',   
+    devtool: 'source-map',   
 };

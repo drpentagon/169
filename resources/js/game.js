@@ -10,6 +10,7 @@ import DialogueHandler from './graphics/dialogue-handler.js';
 
 import Data from './game-data.js';
 import LevelData from './level-data.js';
+import LevelValidator from './level-validator.js';
 
 //Tiles
 import Wall from './objects/wall.js';
@@ -51,61 +52,47 @@ class Game {
 
     resetLevel() {
     	Data.instance.resetLevel();
-    	lib.BOUNCES = 0;
+    	game.initLevel();
     }
 
     initLevel() {
-    	const level = this.levelData.getLevel(0);	
-    	this.validateLevel(level);
+    	this.level = this.levelData.getLevel(Data.instance.level);	
+
+    	const validation = LevelValidator.instance.validate(this.level);
+    	if(!validation.passed) {
+    		this.dialogueHandler.showErrorLog("invalid level data", validation.protocol);
+    		throw "validation failed";
+    	}
 
 		this.dialogueHandler.setCallback(() => {
-			Data.instance.setLevelTimeout(level.length);
-			Data.instance.addAnimatedObject(new Goal(level.goal.x, level.goal.y));	
-			level.balls.forEach(b => Data.instance.addBall(new Ball(b.x, b.y, b.dx, b.dy)));
-			this.addWalls(level.walls);
-			this.addRedirectors(level.redirectors);
-			this.levelGraphics.render();
+			Data.instance.setLevelTimeout(this.level.data.timeout);
+			this.level.goals.forEach(g => Data.instance.addAnimatedObject(new Goal(g.x, g.y, g.rotates)));
+			this.level.balls.forEach(b => Data.instance.addBall(new Ball(b.x, b.y, b.dx, b.dy)));
+			if(this.level.redirectors) this.level.redirectors.forEach(r => Data.instance.addTile(new Redirector(r.x, r.y, r.type, r.static)));
+			if(this.level.walls) this.addWalls(this.level.walls);
 
+			this.levelGraphics.render();
 			this.startGameLoop();		
 		});		    	
 
-		this.dialogueHandler.levelIntroduction(level.name);
+		this.dialogueHandler.levelIntroduction(this.level.data.name);
     }
 
     addWalls(walls_) {
-    	if(walls_ == null) return;
 		walls_.forEach((t) => {
 			switch(Object.keys(t)[0]) {
-			    case "line":
-			    	for(let x = t.line[0][0]; x <= t.line[1][0]; x++) {
-			    		for(let y = t.line[0][1]; y <= t.line[1][1]; y++) {
-							let wall = new Wall(x, y);
-							Data.instance.addTile(wall);				    		
+			    case "block":
+			    	for(let x = t.block[0][0]; x <= t.block[1][0]; x++) {
+			    		for(let y = t.block[0][1]; y <= t.block[1][1]; y++) {
+							Data.instance.addTile(new Wall(x, y));				    		
 			    		}
 			    	}
 			        break;
 			    case "points":
-			    	t.points.map(w => {
-						let wall = new Wall(w[0], w[1]);
-						Data.instance.addTile(wall);				    		
-			    	});
+			    	t.points.map(w => Data.instance.addTile(new Wall(w[0], w[1])));
 			        break;
 			}
 		});
-    }
-
-    addRedirectors(redirectors_) {
-    	if(redirectors_ == null) return;
-
-    	redirectors_.forEach((r) => { 
-    		Data.instance.addTile(new Redirector(r.x, r.y, r.type, r.static));
-    	});
-    }
-
-    validateLevel(level_) {
-    	/*	
-    		should have time limit, name, goal, and at least one ball, redirects with right type
-    	*/
     }
 
     startGameLoop() {
@@ -175,10 +162,10 @@ class Game {
 
 	handleLevelClear() {
 		let timeBonus = parseInt(Data.instance.percentageLeft * 100);
-		let bounceBonus = 100 - Data.instance.bounces;
+		let bounceBonus = parseInt((this.level.data.bounceLimit - Data.instance.bounces) * 100 / this.level.data.bounceLimit);
 		bounceBonus = bounceBonus > 0 ? bounceBonus : 0;
 
-		let redirectBonus = parseInt((15 - Data.instance.redirects) * 100 / 15);
+		let redirectBonus = parseInt((this.level.data.redirectorLimit - Data.instance.redirects) * 100 / this.level.data.redirectorLimit);
 		redirectBonus = redirectBonus > 0 ? redirectBonus : 0;
 
 		let score = timeBonus + bounceBonus + redirectBonus;
@@ -192,9 +179,12 @@ class Game {
 		this.statusGraphics.render();
 		this.animationGraphics.clear();
 		this.levelGraphics.clear();
+
+		this.dialogueHandler.setCallback(() => {
+			this.resetLevel();
+		});
 	}
 }
 
 const game = new Game();
 game.reset();
-game.initLevel();
