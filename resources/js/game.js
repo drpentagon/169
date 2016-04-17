@@ -68,7 +68,14 @@ class Game {
 			Data.instance.setLevelTimeout(this.level.data.timeout);
 			this.level.goals.forEach(g => Data.instance.addAnimatedObject(new Goal(g.x, g.y, g.rotates)));
 			this.level.balls.forEach(b => Data.instance.addBall(new Ball(b.x, b.y, b.dx, b.dy)));
-			if(this.level.redirectors) this.level.redirectors.forEach(r => Data.instance.addTile(new Redirector(r.x, r.y, r.type, r.static)));
+			if(this.level.redirectors) this.level.redirectors.forEach(r => {
+				const redirector = new Redirector(r.x, r.y, r.type, r.static);
+				if(r.static) {
+					Data.instance.addTile(redirector);
+				} else {
+					Data.instance.addAnimatedObject(redirector)
+				}
+			});
 			if(this.level.walls) this.addWalls(this.level.walls);
 
 			this.levelGraphics.render();

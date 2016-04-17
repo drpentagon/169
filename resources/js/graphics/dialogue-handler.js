@@ -44,8 +44,8 @@ class DialogueHandler {
 		this.reset();
 		this.renderBackground();
 
-		//writeHeadline(this.ctx, "Next level", 1, 22);		
-		writeHeadline(this.ctx, levelName_, 1, 36);
+		writeHeadline(this.ctx, "Next level", 8, 22);		
+		writeHeadline(this.ctx, levelName_, 8, 36);
 		this.dialogue = "countdown";		
 	}
 
@@ -80,16 +80,15 @@ class DialogueHandler {
 		this.reset();
 		this.renderBackground();
 
-		writeHeadline(this.ctx, "Course", 15, 15);		
-		writeHeadline(this.ctx, "Clear", 15, 22);		
-		write(this.ctx, "time", 15, 36);		
-		write(this.ctx, "" + elapsedTime_, 57, 36);
-		write(this.ctx, "Bounces", 15, 43);
-		write(this.ctx, "" + bounces_, 57, 43);
-		write(this.ctx, "Redirects", 15, 50);
-		write(this.ctx, "" + redirects_, 57, 50);		
-		write(this.ctx, "score", 15, 57);
-		write(this.ctx, "" + score_, 57, 57);
+		writeHeadline(this.ctx, "Level Clear", 8, 22);		
+		write(this.ctx, "time", 8, 36);		
+		write(this.ctx, "" + elapsedTime_, 50, 36);
+		write(this.ctx, "Bounces", 8, 43);
+		write(this.ctx, "" + bounces_, 50, 43);
+		write(this.ctx, "Redirects", 8, 50);
+		write(this.ctx, "" + redirects_, 50, 50);		
+		write(this.ctx, "score", 8, 57);
+		write(this.ctx, "" + score_, 50, 57);
 	}
 
 	showErrorLog(error_, log_) {
