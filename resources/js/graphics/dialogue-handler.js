@@ -1,7 +1,7 @@
 import LevelGraphics from './level-graphics.js';
 import {BOARD_SIZE} from '../game-helper.js';
 import {createCanvas, clearCanvas} from './graphics-handler.js';
-import {write, writeMini, writeHeadline, writeHuge} from './text-handler.js';
+import {write, writeMini, writeHeadline, writeHuge, writeEnormous} from './text-handler.js';
 
 class DialogueHandler {
 	constructor() {
@@ -40,6 +40,15 @@ class DialogueHandler {
 		this.element.classList.add('show');
     }
 
+    titleScreen() {
+		this.reset();
+		this.renderBackground();    	
+
+		writeHuge(this.ctx, "squ", 8, 8);
+		writeHuge(this.ctx, "are", 8, 36);
+		writeHuge(this.ctx, "d", 8, 64);
+    }
+
 	levelIntroduction(levelName_) {
 		this.reset();
 		this.renderBackground();
@@ -52,7 +61,7 @@ class DialogueHandler {
 	countdown(number_) {
 		this.reset();
 		this.renderBackground();		
-		writeHuge(this.ctx, number_);
+		writeEnormous(this.ctx, number_);
 
 		if(number_ > 0) {
 			window.setTimeout(() => {

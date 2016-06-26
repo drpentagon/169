@@ -1,4 +1,4 @@
-import {DOT_SIZE, DOT_SPACING, DOT_CC, CELL_SIZE, CELL_SPACING, TILE_CC} from '../game-helper.js';
+import {DOT_SIZE, DOT_SPACING, DOT_CC, CELL_SIZE, CELL_SPACING, TILE_CC, TILE_SIZE} from '../game-helper.js';
 import {clearCanvas, square} from './graphics-handler.js';
 
 const letters = { 
@@ -56,12 +56,25 @@ export function writeHeadline(ctx_, text_, xPos_, yPos_) {
 	});
 }
 
-export function writeHuge(ctx_, text_) {
+export function writeHuge(ctx_, text_, xPos_, yPos_) {
+    let x_ = xPos_ * DOT_CC;
+    let y_ = yPos_ * DOT_CC;
+    let i = 0;
+
+    ctx_.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    text_.toUpperCase().split('').forEach(ch => {
+        if(writeLetter(ctx_, ch, x_ + i * TILE_CC * 4, y_, TILE_SIZE, DOT_CC + DOT_SPACING)) {
+            i++;
+        }
+    });    
+}
+
+export function writeEnormous(ctx_, text_) {
     let x_ = 15 * DOT_CC;
     let y_ = 15 * DOT_CC;
 
     ctx_.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    writeLetter(ctx_, text_, x_, y_, TILE_CC * 2 + 6 * DOT_CC, DOT_CC);
+    writeLetter(ctx_, text_, x_, y_, TILE_CC * 2 + 6 * DOT_CC, DOT_CC + DOT_SPACING);
 }
 
 export function writeMini(ctx_, text_, xPos_, yPos_) {

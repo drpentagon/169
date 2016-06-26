@@ -47,7 +47,8 @@ class Game {
     	Data.instance.resetAll();
     	this.statusGraphics.render();
     	this.timerGraphics.render();
-    	this.resetLevel();
+    	this.dialogueHandler.titleScreen();
+    	this.dialogueHandler.setCallback(() => this.resetLevel());
     }
 
     resetLevel() {
