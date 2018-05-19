@@ -1,120 +1,118 @@
-let instance = null;
-let key = {};
+let instance = null
+let key = {}
 
 class SceneData {
-    constructor(key_) {
-        if(key !== key_) throw 'Illegal call to singleton';
-        this.resetAll();
+  constructor (key_) {
+    if (key !== key_) throw new Error('Illegal call to singleton')
+    this.resetAll()
+  }
+
+  static get instance () {
+    if (instance) return instance
+    return (instance = new SceneData(key))
+  }
+
+  resetAll () {
+    this.resetData()
+    this.resetLevel()
+  }
+
+  resetData () {
+    this.lives = 3
+    this.score = 0
+    this.level = 0
+  }
+
+  resetLevel () {
+    this.resetLevelObjects()
+    this.resetTiles()
+    this.resetAnimatedObjects()
+    this.resetBalls()
+    this.elapsedTime = 0
+    this.bounces = 0
+    this.redirects = 0
+  }
+
+  setLevelTimeout (timeout_) {
+    this.timeout = timeout_
+  }
+
+  startTimer () {
+    this.startTime = Date.now()
+    this.elapsedTime = 0
+    this.percentageLeft = 1
+  }
+
+  get levelHasEnded () {
+    return this.elapsedTime >= this.timeout
+  }
+
+  resetLevelObjects () {
+    this.levelMatrix = []
+
+    for (let x = 0; x < 13; x++) {
+      this.levelMatrix[x] = []
+      for (let y = 0; y < 13; y++) {
+        this.levelMatrix[x][y] = null
+      }
     }
+  }
 
-    static get instance() {
-        if(instance)
-            return instance;
-              
-        return (instance = new SceneData(key));
-    }
+  resetTiles () {
+    this.tiles = []
+  }
 
-    resetAll() {
-        this.resetData();
-        this.resetLevel();
-    }
+  addTile (object_) {
+    this.levelMatrix[object_.xPos][object_.yPos] = object_
+    this.tiles.push(object_)
+  }
 
-    resetData() {
-        this.lives = 3;
-        this.score = 0;
-        this.level = 0;        
-    }
+  getObject (xPos_, yPos_) {
+    return this.levelMatrix[xPos_][yPos_]
+  }
 
-    resetLevel() {
-        this.resetLevelObjects();
-        this.resetTiles();
-        this.resetAnimatedObjects();
-        this.resetBalls();
-        this.elapsedTime = 0;
-        this.bounces = 0;
-        this.redirects = 0;
-    }
+  resetAnimatedObjects () {
+    this.animatedObjects = []
+  }
 
-    setLevelTimeout(timeout_) {
-       this.timeout = timeout_; 
-    }
+  addAnimatedObject (object_) {
+    this.animatedObjects.push(object_)
+    this.levelMatrix[object_.xPos][object_.yPos] = object_
+  }
 
-    startTimer() {
-        this.startTime = Date.now();
-        this.elapsedTime = 0;
-        this.percentageLeft = 1;
-    }    
+  resetBalls () {
+    this.balls = []
+  }
 
-    get levelHasEnded() {
-        return this.elapsedTime >= this.timeout;
-    }    
+  addBall (ball_) {
+    this.balls.push(ball_)
+  }
 
-    resetLevelObjects() {
-        this.levelMatrix = []
+  removeBall (ball_) {
+    this.balls = this.balls.filter((ball) => {
+      return (ball !== ball_)
+    })
+  }
 
-        for(let x = 0; x < 13; x++) {
-            this.levelMatrix[x] = [];
-            for(let y = 0; y < 13; y++) {
-                this.levelMatrix[x][y] = null;
-            }
-        }
-    }
+  removeObject (object_) {
+    this.levelMatrix[object_.xPos][object_.yPos] = null
 
-    resetTiles() {
-        this.tiles = [];
-    }        
+    this.tiles = this.tiles.filter((object) => {
+      return (object !== object_)
+    })
 
-    addTile(object_) {
-        this.levelMatrix[object_.xPos][object_.yPos] = object_;
-        this.tiles.push(object_);
-    }
+    this.animatedObjects = this.animatedObjects.filter((object) => {
+      return (object !== object_)
+    })
+  }
 
-    getObject(xPos_, yPos_) {
-        return this.levelMatrix[xPos_][yPos_];
-    }    
+  update (deltaTime_) {
+    this.animatedObjects.map(o => o.update(deltaTime_))
+    this.balls.map(b => b.update(deltaTime_))
 
-    resetAnimatedObjects() {
-        this.animatedObjects = [];
-    }    
-
-    addAnimatedObject(object_) {
-        this.animatedObjects.push(object_);
-        this.levelMatrix[object_.xPos][object_.yPos] = object_;
-    }
-
-    resetBalls() {
-        this.balls = [];
-    }        
-
-    addBall(ball_) {
-        this.balls.push(ball_);
-    }
-
-    removeBall(ball_) {
-        this.balls = this.balls.filter((ball) => {
-            return (ball !== ball_);
-        });         
-    }
-
-    removeObject(object_) {
-        this.levelMatrix[object_.xPos][object_.yPos] = null;
-
-        this.tiles = this.tiles.filter((object) => {
-            return (object !== object_);
-        });
-
-        this.animatedObjects = this.animatedObjects.filter((object) => {
-            return (object !== object_);
-        });       
-    }    
-
-    update(deltaTime_) {
-        this.animatedObjects.map(o => o.update(deltaTime_));
-        this.balls.map(b => b.update(deltaTime_));
-
-        this.elapsedTime = (Date.now() - this.startTime) / 1000;
-        this.percentageLeft = (this.timeout - this.elapsedTime) / this.timeout;
-    }    
+    this.elapsedTime = (Date.now() - this.startTime) / 1000
+    this.percentageLeft = (this.timeout - this.elapsedTime) / this.timeout
+  }
 }
 
-export default SceneData;
+export default SceneData
